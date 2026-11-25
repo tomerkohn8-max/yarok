@@ -11,4 +11,4 @@ export const firebaseConfig = {
 };
 
 // Firebase console → Project settings → Cloud Messaging → Web Push certificates → Key pair.
-export const vapidKey = '';
+export const vapidKey = 'BP38YSjAWwNxybrJtMgZcbG-lvqm_XrV8l9W8Fcgm8i3ywr7b_ls0GwD42jmeNuxIa8SPn_GOE89nylkZMfW-MY';
