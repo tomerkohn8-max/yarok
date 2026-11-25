@@ -25,11 +25,16 @@
 :root{color-scheme:dark;--ground:#0d1a10;--ink:#f1f6ee;--mute:rgba(241,246,238,.66);--faint:rgba(241,246,238,.42);--glass:rgba(255,255,255,.08);--glass2:rgba(255,255,255,.14);--edge:rgba(255,255,255,.18);--lime:#afec4f;--sage:#8ccf3a;--deep:#16301d;--sun:#f3d36b;--water:#9fd0ff;--red:#ff9b85}
 *{box-sizing:border-box;min-width:0}
 html{background:var(--ground)}
-body{background:linear-gradient(180deg,rgba(8,18,10,.35),rgba(8,18,10,.78)),url(img/bg.webp) center/cover fixed,var(--ground);min-height:100%;color:var(--ink);font:16px/1.55 "Heebo","Arial Hebrew",system-ui,sans-serif;overflow-x:clip;margin:0}
+body{background:linear-gradient(180deg,rgba(8,18,10,.12),rgba(8,18,10,.5)),url(img/bg.webp) center/cover fixed,var(--ground);min-height:100%;color:var(--ink);font:16px/1.55 "Heebo","Arial Hebrew",system-ui,sans-serif;overflow-x:clip;margin:0}
 .band{padding-block:clamp(24px,4vw,56px);padding-left:max(5vw,16px,env(safe-area-inset-left,0px));padding-right:max(5vw,16px,env(safe-area-inset-right,0px))}
 .wrap{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:minmax(0,400px) minmax(0,1fr);gap:clamp(24px,6vw,88px);align-items:center}
 h1,h2,h3{line-height:1.08;letter-spacing:-.01em;margin:0;text-wrap:balance;font-weight:500}
-.glass{background:var(--glass);border:1px solid var(--edge);-webkit-backdrop-filter:blur(18px) saturate(140%);backdrop-filter:blur(18px) saturate(140%);border-radius:22px}
+.glass{background:linear-gradient(150deg,rgba(255,255,255,.17),rgba(255,255,255,.06) 55%,rgba(255,255,255,.1));border:1px solid rgba(255,255,255,.14);-webkit-backdrop-filter:blur(22px) saturate(185%) brightness(1.06);backdrop-filter:blur(22px) saturate(185%) brightness(1.06);border-radius:24px;box-shadow:inset 0 1px 0 rgba(255,255,255,.38),inset 0 -1px 0 rgba(255,255,255,.08),inset 0 0 24px -8px rgba(255,255,255,.14),0 10px 30px -14px rgba(0,0,0,.45)}
+.glass:not(.tabs):not(.notif):not(.camhint){position:relative}
+/* specular rim: bright top-left and bottom-right edges, like light through thick glass */
+.glass::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;background:linear-gradient(135deg,rgba(255,255,255,.7),rgba(255,255,255,.08) 32%,rgba(255,255,255,0) 60%,rgba(255,255,255,.35));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+button.glass,.btn,.ghost,.check,.round{transition:transform .45s cubic-bezier(.3,1.6,.5,1),background .25s}
+button.glass:active,.btn:active,.ghost:active,.check:active,.round:active{transform:scale(.95)}
 .side{display:flex;flex-direction:column;gap:20px}
 .side h1{font-size:clamp(44px,6vw,76px);font-weight:300;letter-spacing:-.03em}
 .side h1 b{font-weight:600;display:block}
@@ -42,7 +47,7 @@ h1,h2,h3{line-height:1.08;letter-spacing:-.01em;margin:0;text-wrap:balance;font-
 /* phone */
 .phone{position:relative;width:100%;aspect-ratio:9/19.2;max-height:840px;border-radius:48px;padding:9px;background:linear-gradient(145deg,rgba(255,255,255,.35),rgba(255,255,255,.06));box-shadow:0 40px 80px -30px rgba(0,0,0,.8),inset 0 0 0 1px rgba(255,255,255,.25)}
 .screen{position:relative;height:100%;border-radius:40px;overflow:clip;display:flex;flex-direction:column;isolation:isolate}
-.screen::before{content:"";position:absolute;inset:-40px;background:url(img/bg.webp) center/cover;filter:blur(22px) brightness(.55) saturate(1.1);z-index:-1}
+.screen::before{content:"";position:absolute;inset:-40px;background:url(img/bg.webp) center/cover;filter:blur(22px) brightness(.78) saturate(1.2);z-index:-1}
 .status{display:flex;justify-content:space-between;align-items:center;padding:14px 28px 4px;font:600 14px "Heebo",sans-serif;direction:ltr}
 .status span:last-child{display:flex;gap:6px;align-items:center}
 .status i{display:inline-block;width:22px;height:11px;border:1.5px solid currentColor;border-radius:3px;position:relative}
@@ -51,9 +56,13 @@ h1,h2,h3{line-height:1.08;letter-spacing:-.01em;margin:0;text-wrap:balance;font-
 .view::-webkit-scrollbar{display:none}
 .view>*,.detail>*{flex-shrink:0}
 .view svg,.detail svg{width:18px;height:18px;flex:none}
-.tabs{position:absolute;left:14px;right:14px;bottom:14px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding:6px;border-radius:26px;z-index:4;background:rgba(20,36,24,.45)}
-.tabs button{border:0;background:none;color:var(--mute);font:500 12px "Heebo",sans-serif;display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 0;cursor:pointer;border-radius:20px;min-height:52px}
-.tabs button[aria-current=true]{color:var(--deep);background:var(--lime)}
+.tabs{position:absolute;left:14px;right:14px;bottom:14px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding:6px;border-radius:30px;z-index:4;background:linear-gradient(150deg,rgba(255,255,255,.2),rgba(255,255,255,.07));touch-action:none;user-select:none;-webkit-user-select:none}
+.lens{position:absolute;top:6px;bottom:6px;left:6px;width:60px;border-radius:24px;pointer-events:none;z-index:0;background:linear-gradient(160deg,rgba(214,255,150,.95),rgba(175,236,79,.9) 45%,rgba(140,207,58,.92));box-shadow:inset 0 1.5px 0 rgba(255,255,255,.85),inset 0 -2px 4px rgba(40,80,10,.25),inset 0 0 14px rgba(255,255,255,.35),0 6px 18px -6px rgba(60,120,20,.6);transform-origin:center;transition:transform .35s cubic-bezier(.3,1.6,.5,1)}
+.lens::before{content:"";position:absolute;left:14%;right:14%;top:3px;height:38%;border-radius:20px;background:linear-gradient(rgba(255,255,255,.55),rgba(255,255,255,0))}
+.tabs.drag .lens{transform:scale(1.12,1.08);background:linear-gradient(160deg,rgba(230,255,190,.7),rgba(175,236,79,.55));-webkit-backdrop-filter:blur(2px) saturate(200%);backdrop-filter:blur(2px) saturate(200%)}
+.tabs button{position:relative;z-index:1;transition:color .3s;border:0;background:none;color:var(--ink);font:500 12px "Heebo",sans-serif;display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 0;cursor:pointer;border-radius:20px;min-height:52px}
+.tabs button[aria-current=true]{color:var(--deep)}
+.tabs.drag button{color:var(--ink)}
 .tabs svg{width:22px;height:22px}
 button{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .view,.detail{overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
@@ -83,7 +92,9 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 .mini h3{font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));padding:4px;border-radius:999px}
 .seg button{border:0;background:none;color:var(--mute);font:500 14px "Heebo",sans-serif;padding:8px;border-radius:999px;cursor:pointer}
-.seg button[aria-pressed=true]{background:var(--lime);color:var(--deep)}
+.seg button{transition:background .35s,color .3s,transform .45s cubic-bezier(.3,1.6,.5,1)}
+.seg button[aria-pressed=true]{background:linear-gradient(160deg,rgba(214,255,150,.95),rgba(175,236,79,.9) 45%,rgba(140,207,58,.92));color:var(--deep);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.85),inset 0 -2px 4px rgba(40,80,10,.2),0 4px 12px -6px rgba(60,120,20,.6)}
+.seg button:active{transform:scale(.94)}
 .task{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 12px;transition:opacity .3s}
 .task img{width:64px;height:64px;object-fit:contain;filter:drop-shadow(0 6px 8px rgba(0,0,0,.35))}
 .task h3{font-size:16px;font-weight:500}
@@ -147,7 +158,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 .hist i{aspect-ratio:1;border-radius:4px;background:rgba(255,255,255,.08)}
 .hist i.on{background:var(--water)}
 .cta{display:flex;gap:10px}
-.btn{flex:1;font:600 16px "Heebo",sans-serif;border-radius:18px;padding:14px;border:0;cursor:pointer;color:var(--deep);background:linear-gradient(90deg,var(--lime),var(--sage));display:flex;justify-content:center;align-items:center;gap:8px;min-height:52px}
+.btn{flex:1;font:600 16px "Heebo",sans-serif;border-radius:22px;box-shadow:inset 0 1.5px 0 rgba(255,255,255,.75),inset 0 -2px 4px rgba(40,80,10,.2),0 8px 20px -10px rgba(60,120,20,.7);padding:14px;border:0;cursor:pointer;color:var(--deep);background:linear-gradient(90deg,var(--lime),var(--sage));display:flex;justify-content:center;align-items:center;gap:8px;min-height:52px}
 .btn svg{width:18px;height:18px}
 .btn.alt{flex:none;width:56px;background:var(--glass2);color:var(--ink);border:1px solid var(--edge)}
 .btn:disabled{opacity:.4;cursor:default}
@@ -175,10 +186,12 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 .set b{font-weight:500}
 .set small{color:var(--mute);font-size:13px;line-height:1.35}
 .sw{appearance:none;width:48px;height:28px;border-radius:99px;background:rgba(255,255,255,.16);position:relative;cursor:pointer;flex:none;transition:background .2s;margin:0}
-.sw::after{content:"";position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:right .2s}
-.sw:checked{background:var(--sage)}.sw:checked::after{right:23px}
+.sw::after{content:"";position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:999px;background:linear-gradient(#fff,#eef3ea);box-shadow:inset 0 1px 0 #fff,0 2px 6px rgba(0,0,0,.25);transition:right .45s cubic-bezier(.3,1.6,.5,1),width .3s cubic-bezier(.3,1.6,.5,1)}
+.sw:active::after{width:30px}
+.sw:checked:active::after{right:15px}
+.sw:checked{background:linear-gradient(160deg,var(--lime),var(--sage));box-shadow:inset 0 1px 0 rgba(255,255,255,.5)}.sw:checked::after{right:23px}
 input[type=time]{font:500 18px "Heebo",sans-serif;border:1px solid var(--edge);border-radius:12px;padding:6px 10px;background:rgba(255,255,255,.06);color:var(--ink)}
-.notif{position:absolute;top:10px;left:10px;right:10px;z-index:9;padding:12px 14px;border-radius:24px;background:rgba(30,46,34,.6);box-shadow:0 20px 40px -16px rgba(0,0,0,.6);transform:translateY(-150%);transition:transform .5s cubic-bezier(.2,1.25,.4,1)}
+.notif{position:absolute;top:10px;left:10px;right:10px;z-index:9;padding:12px 14px;border-radius:28px;background:linear-gradient(150deg,rgba(60,90,60,.55),rgba(30,50,34,.5));box-shadow:0 20px 40px -16px rgba(0,0,0,.6);transform:translateY(-150%);transition:transform .5s cubic-bezier(.2,1.25,.4,1)}
 .notif.show{transform:none}
 .nt{display:flex;gap:10px;align-items:center;font-size:13px;color:var(--mute)}
 .nt img{width:28px;height:28px;border-radius:8px;object-fit:cover}
@@ -438,9 +451,51 @@ function reminders(){
  <button class="small" data-reset>אפס את נתוני הדוגמה</button>`;
 }
 const TABS=[['today','היום','M4 11l8-7 8 7v9H4zM10 20v-5h4v5'],['plants','הצמחים','M12 21V11C12 6 8 4 4 4c0 5 3 7 8 7zm0 0c0-4 3-7 8-7 0 4-3 7-8 7z'],['add','הוספה','M12 5v14M5 12h14'],['remind','תזכורות','M6 16V11a6 6 0 0 1 12 0v5l2 2H4zM10 21h4']];
+/* Liquid-glass lens under the active tab: it stretches toward the new tab,
+   overshoots a little and settles. Dragging along the bar moves it with the finger. */
+let lensAt=null;
+const calm=matchMedia('(prefers-reduced-motion: reduce)');
+function lensTarget(tab){const b=$('tabs').querySelector(`[data-tab="${tab}"]`);return b?{x:b.offsetLeft,w:b.offsetWidth}:null}
+function placeLens(p){const L=$('tabs').querySelector('.lens');L.style.left=p.x+'px';L.style.width=p.w+'px'}
+function moveLens(){
+ const L=$('tabs').querySelector('.lens'),to=lensTarget(S.tab);if(!L||!to)return;
+ const from=lensAt;lensAt=to;placeLens(to);
+ if(!from||calm.matches||(from.x===to.x&&from.w===to.w)||!L.animate)return;
+ const dir=Math.sign(to.x-from.x),dx=Math.abs(to.x-from.x);
+ const mid={x:Math.min(from.x,to.x)+dx*.18,w:Math.max(from.w,to.w)+dx*.64};
+ L.animate([
+  {left:from.x+'px',width:from.w+'px',transform:'scale(1,1)'},
+  {left:mid.x+'px',width:mid.w+'px',transform:'scale(1,.86)',offset:.38},
+  {left:(to.x+dir*7)+'px',width:(to.w-4)+'px',transform:'scale(1,1.05)',offset:.72},
+  {left:to.x+'px',width:to.w+'px',transform:'scale(1,1)'}
+ ],{duration:560,easing:'cubic-bezier(.25,.8,.35,1)'});
+}
+(()=>{
+ const bar=$('tabs');let drag=null;
+ bar.addEventListener('pointerdown',e=>{drag={x0:e.clientX,on:false,id:e.pointerId}});
+ bar.addEventListener('pointermove',e=>{
+  if(!drag)return;
+  if(!drag.on){if(Math.abs(e.clientX-drag.x0)<8)return;drag.on=true;bar.classList.add('drag');bar.setPointerCapture(drag.id)}
+  const r=bar.getBoundingClientRect(),w=lensAt.w,x=Math.max(6,Math.min(r.width-6-w,e.clientX-r.left-w/2));
+  placeLens({x,w});
+ });
+ const end=e=>{
+  if(!drag)return;const was=drag.on;drag=null;bar.classList.remove('drag');if(!was)return;
+  const r=bar.getBoundingClientRect(),cx=e.clientX-r.left;
+  let best=S.tab,bd=1e9;TABS.forEach(([k])=>{const t=lensTarget(k),d=Math.abs(t.x+t.w/2-cx);if(d<bd){bd=d;best=k}});
+  lensAt={x:parseFloat(bar.querySelector('.lens').style.left),w:lensAt.w};
+  if(best!==S.tab){S.tab=best;sel=null;$('view').scrollTop=0;save()}
+  render();bar.dataset.dragged=Date.now();
+ };
+ bar.addEventListener('pointerup',end);bar.addEventListener('pointercancel',end);
+ addEventListener('resize',()=>{lensAt=null;moveLens()});
+})();
 function render(){
  sync();
- $('tabs').innerHTML=TABS.map(([k,t,d])=>`<button data-tab="${k}" aria-current="${S.tab===k}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"/></svg>${t}</button>`).join('');
+ const bar=$('tabs');
+ if(!bar.dataset.ready){bar.dataset.ready=1;bar.innerHTML='<span class="lens" aria-hidden="true"></span>'+TABS.map(([k,t,d])=>`<button data-tab="${k}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"/></svg>${t}</button>`).join('')}
+ bar.querySelectorAll('button').forEach(b=>b.setAttribute('aria-current',b.dataset.tab===S.tab));
+ moveLens();
  const v=$('view'),y=v.scrollTop;
  v.innerHTML=S.tab==='today'?today():S.tab==='plants'?plants():S.tab==='add'?add():reminders();
  v.scrollTop=y;
@@ -480,6 +535,7 @@ const openDue=()=>S.plants.filter(p=>due(p)&&!S.done[p.id]);
 
 document.addEventListener('click',e=>{
  const b=e.target.closest('button');if(!b)return;const d=b.dataset;
+ if(d.tab&&Date.now()-(+$('tabs').dataset.dragged||0)<300)return;
  if(d.tab){S.tab=d.tab;sel=null;$('view').scrollTop=0;save();render()}
  else if(d.seg){S.seg=d.seg;save();render()}
  else if(d.todo){const [id,i]=d.todo.split(':').map(Number);const a=S.todo[id]=S.todo[id]||[];a[i]=!a[i];save();render()}
