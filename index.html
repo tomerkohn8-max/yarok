@@ -56,12 +56,14 @@ button.glass:active,.btn:active,.ghost:active,.check:active,.round:active{transf
 .view::-webkit-scrollbar{display:none}
 .view>*,.detail>*{flex-shrink:0}
 .view svg,.detail svg{width:18px;height:18px;flex:none}
-.tabs{position:absolute;left:14px;right:14px;bottom:14px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding:6px;border-radius:30px;z-index:4;background:linear-gradient(150deg,rgba(255,255,255,.2),rgba(255,255,255,.07));touch-action:none;user-select:none;-webkit-user-select:none}
-.lens{position:absolute;top:6px;bottom:6px;left:6px;width:60px;border-radius:24px;pointer-events:none;z-index:0;background:linear-gradient(160deg,rgba(214,255,150,.95),rgba(175,236,79,.9) 45%,rgba(140,207,58,.92));box-shadow:inset 0 1.5px 0 rgba(255,255,255,.85),inset 0 -2px 4px rgba(40,80,10,.25),inset 0 0 14px rgba(255,255,255,.35),0 6px 18px -6px rgba(60,120,20,.6);transform-origin:center;transition:transform .35s cubic-bezier(.3,1.6,.5,1)}
-.lens::before{content:"";position:absolute;left:14%;right:14%;top:3px;height:38%;border-radius:20px;background:linear-gradient(rgba(255,255,255,.55),rgba(255,255,255,0))}
-.tabs.drag .lens{transform:scale(1.12,1.08);background:linear-gradient(160deg,rgba(230,255,190,.7),rgba(175,236,79,.55));-webkit-backdrop-filter:blur(2px) saturate(200%);backdrop-filter:blur(2px) saturate(200%)}
+.tabs{position:absolute;left:14px;right:14px;bottom:14px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding:6px;border-radius:999px;z-index:4;background:rgba(255,255,255,.08);-webkit-backdrop-filter:blur(7px) saturate(190%) brightness(1.08);backdrop-filter:blur(7px) saturate(190%) brightness(1.08);box-shadow:inset 0 0 0 1px rgba(255,255,255,.22),inset 1.5px 1.5px 1px -.5px rgba(255,255,255,.95),inset -1.5px -1.5px 1px -.5px rgba(255,255,255,.7),inset 0 0 14px rgba(255,255,255,.28),0 14px 34px -12px rgba(0,0,0,.5);touch-action:none;user-select:none;-webkit-user-select:none}
+.tabs.refract{-webkit-backdrop-filter:url(#lg-bar) blur(3px) saturate(190%) brightness(1.08);backdrop-filter:url(#lg-bar) blur(3px) saturate(190%) brightness(1.08)}
+.lens{position:absolute;top:6px;bottom:6px;left:6px;width:60px;border-radius:999px;pointer-events:none;z-index:0;background:radial-gradient(120% 140% at 50% 50%,rgba(175,236,79,.32),rgba(175,236,79,.08) 70%),rgba(255,255,255,.1);-webkit-backdrop-filter:blur(2px) saturate(220%) brightness(1.15);backdrop-filter:blur(2px) saturate(220%) brightness(1.15);box-shadow:inset 0 0 0 1px rgba(255,255,255,.22),inset 1.5px 1.5px 1px -.5px rgba(255,255,255,.95),inset -1.5px -1.5px 1px -.5px rgba(255,255,255,.7),inset 0 0 14px rgba(255,255,255,.28),0 6px 16px -6px rgba(0,0,0,.45);transform-origin:center;transition:transform .5s cubic-bezier(.3,1.6,.5,1),background .3s}
+.tabs.refract .lens{-webkit-backdrop-filter:url(#lg-lens) saturate(220%) brightness(1.15);backdrop-filter:url(#lg-lens) saturate(220%) brightness(1.15)}
+.lens::before{content:"";position:absolute;left:12%;right:12%;top:2px;height:42%;border-radius:999px;background:linear-gradient(rgba(255,255,255,.42),rgba(255,255,255,0));pointer-events:none}
+.tabs.drag .lens{transform:scale(1.22,1.16);background:rgba(255,255,255,.06)}
 .tabs button{position:relative;z-index:1;transition:color .3s;border:0;background:none;color:var(--ink);font:500 12px "Heebo",sans-serif;display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 0;cursor:pointer;border-radius:20px;min-height:52px}
-.tabs button[aria-current=true]{color:var(--deep)}
+.tabs button[aria-current=true]{color:var(--lime);text-shadow:0 0 12px rgba(175,236,79,.45)}
 .tabs.drag button{color:var(--ink)}
 .tabs svg{width:22px;height:22px}
 button{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
@@ -93,7 +95,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 .seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));padding:4px;border-radius:999px}
 .seg button{border:0;background:none;color:var(--mute);font:500 14px "Heebo",sans-serif;padding:8px;border-radius:999px;cursor:pointer}
 .seg button{transition:background .35s,color .3s,transform .45s cubic-bezier(.3,1.6,.5,1)}
-.seg button[aria-pressed=true]{background:linear-gradient(160deg,rgba(214,255,150,.95),rgba(175,236,79,.9) 45%,rgba(140,207,58,.92));color:var(--deep);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.85),inset 0 -2px 4px rgba(40,80,10,.2),0 4px 12px -6px rgba(60,120,20,.6)}
+.seg button[aria-pressed=true]{background:radial-gradient(120% 140% at 50% 50%,rgba(175,236,79,.3),rgba(175,236,79,.06) 70%),rgba(255,255,255,.1);color:var(--lime);box-shadow:inset 0 0 0 1px rgba(255,255,255,.22),inset 1.5px 1.5px 1px -.5px rgba(255,255,255,.95),inset -1.5px -1.5px 1px -.5px rgba(255,255,255,.7),inset 0 0 14px rgba(255,255,255,.28),0 4px 12px -6px rgba(0,0,0,.4)}
 .seg button:active{transform:scale(.94)}
 .task{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 12px;transition:opacity .3s}
 .task img{width:64px;height:64px;object-fit:contain;filter:drop-shadow(0 6px 8px rgba(0,0,0,.35))}
@@ -130,9 +132,9 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 .meter{position:relative;height:8px;border-radius:9px;background:repeating-linear-gradient(-45deg,rgba(255,255,255,.12) 0 2px,transparent 2px 5px);overflow:hidden}
 .meter i{position:absolute;inset-block:0;right:0;border-radius:9px;background:linear-gradient(270deg,var(--water),#d7ecff)}
 /* detail */
-.detail{position:absolute;inset:0;z-index:6;background:rgba(10,22,13,.55);-webkit-backdrop-filter:blur(34px) saturate(130%);backdrop-filter:blur(34px) saturate(130%);overflow-y:auto;padding:0 18px 24px;display:flex;flex-direction:column;gap:14px;scrollbar-width:none;animation:rise .35s ease}
+.detail{position:absolute;inset:0;z-index:6;background:rgba(10,22,13,.55);-webkit-backdrop-filter:blur(34px) saturate(130%);backdrop-filter:blur(34px) saturate(130%);overflow-y:auto;padding:0 18px 24px;display:flex;flex-direction:column;gap:14px;scrollbar-width:none;animation:rise .6s cubic-bezier(.25,.8,.35,1)}
 .detail::-webkit-scrollbar{display:none}
-@keyframes rise{from{opacity:0;transform:translateY(24px)}}
+@keyframes rise{from{opacity:0;transform:translateY(40px) scale(.94);filter:blur(14px);border-radius:48px}60%{opacity:1;filter:blur(0)}80%{transform:translateY(-4px) scale(1.01)}to{transform:none}}
 .dhead{display:flex;justify-content:space-between;padding-top:52px}
 .round{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;cursor:pointer;color:var(--ink)}
 .round svg{width:20px;height:20px}
@@ -158,7 +160,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 .hist i{aspect-ratio:1;border-radius:4px;background:rgba(255,255,255,.08)}
 .hist i.on{background:var(--water)}
 .cta{display:flex;gap:10px}
-.btn{flex:1;font:600 16px "Heebo",sans-serif;border-radius:22px;box-shadow:inset 0 1.5px 0 rgba(255,255,255,.75),inset 0 -2px 4px rgba(40,80,10,.2),0 8px 20px -10px rgba(60,120,20,.7);padding:14px;border:0;cursor:pointer;color:var(--deep);background:linear-gradient(90deg,var(--lime),var(--sage));display:flex;justify-content:center;align-items:center;gap:8px;min-height:52px}
+.btn{flex:1;font:600 16px "Heebo",sans-serif;border-radius:999px;padding:14px;border:0;cursor:pointer;color:var(--deep);background:radial-gradient(90% 120% at 50% 55%,#c4f56e,#a2e042 55%,rgba(175,236,79,.75));box-shadow:inset 0 0 0 1px rgba(255,255,255,.35),inset 2px 2px 1px -.5px rgba(255,255,255,.95),inset -2px -2px 1px -.5px rgba(255,255,255,.75),inset 0 0 18px rgba(255,255,255,.45),0 10px 24px -10px rgba(80,140,20,.8);display:flex;justify-content:center;align-items:center;gap:8px;min-height:52px}
 .btn svg{width:18px;height:18px}
 .btn.alt{flex:none;width:56px;background:var(--glass2);color:var(--ink);border:1px solid var(--edge)}
 .btn:disabled{opacity:.4;cursor:default}
@@ -451,6 +453,41 @@ function reminders(){
  <button class="small" data-reset>אפס את נתוני הדוגמה</button>`;
 }
 const TABS=[['today','היום','M4 11l8-7 8 7v9H4zM10 20v-5h4v5'],['plants','הצמחים','M12 21V11C12 6 8 4 4 4c0 5 3 7 8 7zm0 0c0-4 3-7 8-7 0 4-3 7-8 7z'],['add','הוספה','M12 5v14M5 12h14'],['remind','תזכורות','M6 16V11a6 6 0 0 1 12 0v5l2 2H4zM10 21h4']];
+/* Liquid Glass refraction. A displacement map shaped like the pill bends the
+   backdrop near the rim, the way thick glass does. Chromium can feed an SVG
+   filter to backdrop-filter; Safari keeps the frosted fallback. */
+const canRefract=/Chrome\//.test(navigator.userAgent)&&!/iPhone|iPad|iPod/.test(navigator.userAgent);
+function pillMap(w,h,bezel){
+ const c=document.createElement('canvas');c.width=w;c.height=h;const g=c.getContext('2d'),im=g.createImageData(w,h),r=h/2;
+ for(let y=0;y<h;y++)for(let x=0;x<w;x++){
+  const qx=Math.max(r,Math.min(w-r,x+.5)),vx=x+.5-qx,vy=y+.5-r,len=Math.hypot(vx,vy)||1,d=r-len;
+  let dx=0,dy=0;if(d<bezel&&d>-1){const t=1-Math.max(0,d)/bezel,m=t*t;dx=-vx/len*m;dy=-vy/len*m}
+  const i=(y*w+x)*4;im.data[i]=128+dx*127;im.data[i+1]=128+dy*127;im.data[i+2]=128;im.data[i+3]=255;
+ }
+ g.putImageData(im,0,0);return c.toDataURL();
+}
+function liquidFilters(){
+ if(!canRefract)return;
+ const bar=$('tabs'),L=bar.querySelector('.lens');if(!L)return;
+ const mk=(id,w,h,bezel,scale)=>`<filter id="${id}" x="0" y="0" width="${w}" height="${h}" filterUnits="userSpaceOnUse" primitiveUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feImage href="${pillMap(w,h,bezel)}" x="0" y="0" width="${w}" height="${h}" preserveAspectRatio="none" result="m"/><feDisplacementMap in="SourceGraphic" in2="m" scale="${scale}" xChannelSelector="R" yChannelSelector="G"/></filter>`;
+ const bw=Math.round(bar.offsetWidth),bh=Math.round(bar.offsetHeight),lw=Math.round(L.offsetWidth)||80,lh=Math.round(L.offsetHeight)||52;
+ let svg=document.getElementById('lg-defs');
+ if(!svg){svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.id='lg-defs';svg.setAttribute('width','0');svg.setAttribute('height','0');svg.style.position='absolute';document.body.appendChild(svg)}
+ svg.innerHTML=mk('lg-bar',bw,bh,Math.min(18,bh*.4),26)+mk('lg-lens',lw,lh,Math.min(16,lh*.45),34);
+ bar.classList.add('refract');
+}
+/* the new screen flows in from the side of the tab you moved toward, sharpening as it lands */
+let shownTab=null;
+function flowIn(prev){
+ if(calm.matches||prev===null||prev===S.tab)return;
+ const a=lensTarget(prev),b=lensTarget(S.tab);if(!a||!b)return;
+ const dir=Math.sign(b.x-a.x);
+ $('view').animate([
+  {opacity:0,transform:`translateX(${dir*34}px) scale(.965)`,filter:'blur(14px) saturate(1.4)'},
+  {opacity:1,transform:`translateX(${-dir*4}px) scale(1.005)`,filter:'blur(0) saturate(1)',offset:.7},
+  {opacity:1,transform:'none',filter:'none'}
+ ],{duration:640,easing:'cubic-bezier(.22,.65,.25,1)'});
+}
 /* Liquid-glass lens under the active tab: it stretches toward the new tab,
    overshoots a little and settles. Dragging along the bar moves it with the finger. */
 let lensAt=null;
@@ -488,7 +525,7 @@ function moveLens(){
   render();bar.dataset.dragged=Date.now();
  };
  bar.addEventListener('pointerup',end);bar.addEventListener('pointercancel',end);
- addEventListener('resize',()=>{lensAt=null;moveLens()});
+ addEventListener('resize',()=>{lensAt=null;moveLens();liquidFilters()});
 })();
 function render(){
  sync();
@@ -496,9 +533,11 @@ function render(){
  if(!bar.dataset.ready){bar.dataset.ready=1;bar.innerHTML='<span class="lens" aria-hidden="true"></span>'+TABS.map(([k,t,d])=>`<button data-tab="${k}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"/></svg>${t}</button>`).join('')}
  bar.querySelectorAll('button').forEach(b=>b.setAttribute('aria-current',b.dataset.tab===S.tab));
  moveLens();
+ if(!document.getElementById('lg-defs'))liquidFilters();
  const v=$('view'),y=v.scrollTop;
  v.innerHTML=S.tab==='today'?today():S.tab==='plants'?plants():S.tab==='add'?add():reminders();
  v.scrollTop=y;
+ const prevTab=shownTab;shownTab=S.tab;flowIn(prevTab);
  const old=$('screen').querySelector('.detail');if(old)old.remove();
  if(sel)$('screen').insertAdjacentHTML('beforeend',detail());
 }
