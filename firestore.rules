@@ -1,0 +1,14 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // One document per phone, keyed by its push token. Phones can write their
+    // own schedule but nobody can read the collection from the browser; only
+    // the reminder job (admin credentials) reads it.
+    match /devices/{token} {
+      allow create, update: if request.resource.data.token == token
+        && request.resource.data.keys().hasOnly(
+             ['token', 'tz', 'time', 'combine', 'enabled', 'plants', 'updatedAt', 'lastSent']);
+      allow read, delete: if false;
+    }
+  }
+}

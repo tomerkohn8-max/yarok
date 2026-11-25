@@ -1,10 +1,13 @@
 // Caches the app shell so it opens offline; bump VERSION when files change.
-const VERSION = 'yarok-v1';
+const VERSION = 'yarok-v3';
 const ASSETS = [
-  './', 'index.html', 'manifest.webmanifest',
+  './', 'index.html', 'manifest.webmanifest', 'push.js', 'firebase-config.js',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png',
   'img/bg.webp', 'img/monstera.webp', 'img/snake.webp', 'img/pothos.webp',
-  'img/lily.webp', 'img/zz.webp', 'img/fern.webp', 'img/cactus.webp'
+  'img/lily.webp', 'img/zz.webp', 'img/fern.webp', 'img/cactus.webp',
+  'img/my-basil.webp', 'img/my-philodendron.webp', 'img/my-dracaena.webp', 'img/my-adansonii.webp',
+  'img/my-ivy.webp', 'img/my-coleus.webp', 'img/my-kalanchoe.webp', 'img/my-croton.webp',
+  'img/my-sansevieria.webp', 'img/my-dieffenbachia.webp'
 ];
 
 self.addEventListener('install', e => {
@@ -32,11 +35,26 @@ self.addEventListener('fetch', e => {
   );
 });
 
+// Reminders from the hourly job arrive as data-only FCM messages.
+self.addEventListener('push', e => {
+  let msg = {};
+  try { const d = e.data.json(); msg = d.data || d.notification || d; } catch (err) {}
+  e.waitUntil(self.registration.showNotification(msg.title || 'ירוק בבית', {
+    body: msg.body || 'הצמחים מחכים לך',
+    icon: 'icons/icon-192.png',
+    badge: 'icons/icon-192.png',
+    tag: 'daily',
+    lang: 'he',
+    dir: 'rtl',
+    data: { url: msg.url || './' }
+  }));
+});
+
 // Tapping a reminder opens (or focuses) the app.
 self.addEventListener('notificationclick', e => {
   e.notification.close();
   e.waitUntil(self.clients.matchAll({ type: 'window' }).then(list => {
     const open = list.find(c => 'focus' in c);
-    return open ? open.focus() : self.clients.openWindow('./');
+    return open ? open.focus() : self.clients.openWindow(e.notification.data?.url || './');
   }));
 });

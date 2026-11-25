@@ -1,2 +1,5 @@
 artifact.html
 .DS_Store
+node_modules/
+src-photos/
+cut/

@@ -98,6 +98,17 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 .ghost{flex:1;font:500 13px "Heebo",sans-serif;border-radius:12px;padding:7px 8px;border:1px solid var(--edge);background:rgba(255,255,255,.05);color:var(--ink);cursor:pointer}
 .tip{padding:14px 16px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center}
 .tip h3{font-size:15px;margin-bottom:3px}
+.txt{margin:0;font-size:14px;line-height:1.6;color:var(--ink)}
+.todo{display:flex;flex-direction:column;gap:6px}
+.todoi{display:flex;align-items:center;gap:10px;text-align:start;background:none;border:0;color:var(--ink);font:400 14px "Heebo",sans-serif;padding:4px 0;cursor:pointer}
+.todoi .check{width:28px;height:28px;flex:none}
+.todoi .check svg{width:14px;height:14px}
+.todoi.on{color:var(--faint);text-decoration:line-through}
+.attn{display:flex;flex-direction:column;gap:8px;padding:14px}
+.attn h3{font-size:15px}
+.attn button{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:10px;align-items:center;background:rgba(255,255,255,.05);border:1px solid var(--edge);border-radius:16px;padding:6px 10px;color:var(--ink);font:inherit;text-align:start;cursor:pointer}
+.attn img{width:44px;height:44px;object-fit:contain}
+.attn small{display:block;color:var(--mute);font-size:12px;line-height:1.3}
 .tip p{margin:0;font-size:13px;color:var(--mute)}
 .tip .big{font:300 30px "Heebo",sans-serif;color:var(--sun);white-space:nowrap}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
@@ -226,6 +237,56 @@ body{background:var(--ground)}
 <script>
 {
 const T={
+ 'my-basil':{sp:'בזיליקום',lat:'Ocimum basilicum',every:3,light:'שמש ישירה, 6+ שעות',temp:'18–30°',hum:'40–60%',health:['warn','צריך שמש'],
+  cond:'צמח צעיר ומוארך עם מעט עלים. הגבעול עקום ונמתח לכיוון האור, סימן שחסרה לו שמש. בעלים העליונים יש חורים קטנים וכתמים חומים בשוליים, כנראה נזק של מזיקים (כנימות, זחלים או חלזונות). בחורף, בתוך הבית, בזיליקום נוטה להיחלש.',
+  pot:'קופסת שימורים צבועה: מחזור יפה, ובגודל מתאים לעכשיו. חשוב לוודא שיש חורי ניקוז בתחתית, אחרת המים עומדים והשורשים נרקבים. פח מתחמם ויכול להחליד, אז באביב כדאי לעבור לעציץ חרס של כ-15 ס״מ.',
+  todo:['להעביר לחלון הכי שמשי בבית','לבדוק את גב העלים לחרקים','לקטום את הקודקוד מעל זוג עלים','לוודא שיש חורי ניקוז בקופסה'],
+  tip:'קוטפים תמיד מלמעלה, מעל זוג עלים. כך הוא מתפצל ונהיה שיחי במקום לגדול לגובה. בזיליקום אוהב אדמה לחה אבל לא בוצית.'},
+ 'my-philodendron':{sp:'פילודנדרון סלואום',lat:'Thaumatophyllum bipinnatifidum',every:7,light:'בהיר עקיף',temp:'18–28°',hum:'50–70%',health:['ok','בריא, מחפש אור'],
+  cond:'עלים צעירים, ירוקים ובריאים, עם החריצים הראשונים ובלי כתמים. עלה אחד גדל על פטוטרת ארוכה מאוד, סימן שהוא מחפש אור. נראה שיש שני צמחים קטנים באותו עציץ, כנראה שתולים לאחרונה. הזיהוי לפי עלים צעירים: ייתכן שזה זן קרוב כמו "קסנאדו".',
+  pot:'עציץ קרמיקה מעולה עם צלחת, בצבע שמתאים לבית. הוא די גדול ביחס לצמח, ולכן האדמה תישאר רטובה הרבה זמן: להשקות רק כשה-3–4 ס״מ העליונים יבשים ולרוקן את הצלחת. המחצלת מתחת סופגת מים, וכדאי לשים לב שלא תתעפש.',
+  todo:['להזיז קרוב יותר לחלון, בלי שמש צהריים ישירה','לרוקן את הצלחת 15 דקות אחרי השקיה','לסובב את העציץ רבע סיבוב פעם בשבוע'],
+  tip:'כשיגדל, העלים יהיו גדולים ומחורצים עמוק. כדאי לתכנן לו מקום.'},
+ 'my-dracaena':{sp:'דרצנה מסולסלת',lat:'Dracaena fragrans',every:10,light:'בינוני עד בהיר עקיף',temp:'18–27°',hum:'40–60%',health:['warn','עלה יבש להסרה'],
+  cond:'עלים מסולסלים בצבע ירוק-ליים, וזה מאפיין של הזן (כנראה \'Hawaiian Sunshine\'). הצבע מעט בהיר מהרגיל, ייתכן שחסר אור. יש עלה תחתון אחד חום ויבש שתלוי על הגזע. שאריות עלים ישנים לאורך הגזע הן תקינות. אין סימני ריקבון.',
+  pot:'כלי זכוכית טורקיז עם עציץ פלסטיק בפנים: שילוב נכון. אחרי השקיה צריך לבדוק שלא נשארים מים בתחתית הכלי, כי דרצנה רגישה לשורשים רטובים. הגודל מתאים, ומחליפים רק באביב אם השורשים יוצאים מלמטה.',
+  todo:['להסיר את העלה היבש בתנועה עדינה','לבדוק שאין מים עומדים בכלי החיצוני','להשקות במים שעמדו לילה'],
+  tip:'קצוות חומים בעלים מגיעים בדרך כלל מכלור ופלואור במי הברז או מאוויר יבש, לא מחוסר מים.'},
+ 'my-adansonii':{sp:'מונסטרה אדנסוני',lat:'Monstera adansonii',every:7,light:'בהיר עקיף',temp:'18–29°',hum:'60% ומעלה',health:['ok','בריאה וגדלה'],
+  cond:'מטפסת יפה על עמוד הקוקוס עם הרבה עלים מחוררים, סימן לצמח בריא. יש עלה תחתון אחד מצהיב, שזה טבעי לעלה ישן או סימן לעודף מים. בחלק העליון עלה אחד מקומט ומסולסל, בדרך כלל בגלל אוויר יבש. העלים העליונים קטנים מהתחתונים, אולי חסר לה אור.',
+  pot:'הכי טוב מכולם: קרמיקה מחורצת עם צלחת ועמוד טיפוס. הגודל מתאים לשנה-שנתיים. כדאי לקשור את הגבעולים העליונים לעמוד ולהרטיב אותו מדי פעם, כדי שהשורשים האוויריים ייאחזו בו.',
+  todo:['להסיר את העלה הצהוב','לקשור גבעולים חופשיים לעמוד','לרסס את עמוד הקוקוס פעם בשבוע'],
+  tip:'ככל שהיא מטפסת ונאחזת בעמוד, העלים החדשים יוצאים גדולים ומחוררים יותר.'},
+ 'my-ivy':{sp:'קיסוס החורש',lat:'Hedera helix',every:7,act:'החלפת מים',light:'בהיר עקיף, אוהב קרירות',temp:'10–24°',hum:'40–60%',health:['ok','ייחור בריא'],
+  cond:'ייחור צעיר במים עם עלים ירוקים-בהירים ובריאים, בלי כתמים או ייבוש. ייחורי קיסוס מוציאים שורשים במים תוך 2–4 שבועות.',
+  pot:'בקבוק ההנדריקס נראה מעולה, אבל הוא אטום: אי אפשר לראות את מפלס המים ואת השורשים. כדאי למלא עד הצוואר ולבדוק עם האצבע. כשיהיו שורשים של 3–5 ס״מ אפשר לשתול באדמה, או להשאיר במים ולהוסיף מעט דשן נוזלי פעם בחודש.',
+  todo:['להחליף מים פעם בשבוע','לוודא שאין עלים בתוך המים','לבדוק שורשים בעוד שבועיים'],
+  tip:'קיסוס אוהב קרירות. ליד תנור או מזגן חם הוא מתייבש ומושך קרדית.'},
+ 'my-coleus':{sp:'קולאוס',lat:'Coleus scutellarioides',every:5,act:'החלפת מים',light:'בהיר, מעט שמש בוקר',temp:'18–28°',hum:'50–70%',health:['warn','נמתח, חסר אור'],
+  cond:'שלושה ייחורים במים: אחד עם עלים מלאים, ושניים ארוכים וחשופים עם מעט עלים. המרווחים הגדולים בין העלים הם סימן ברור לחוסר אור, וגם הצבעים מעט דהויים (בקולאוס הצבע מתחזק באור). באחד הגבעולים מתחילה פריחה, שמחלישה את הצמח. כמה עלים תחתונים ורדרדים ונבולים.',
+  pot:'כד הקרמיקה יפה, והצוואר הצר מחזיק את הייחורים יציבים. החיסרון: קשה לראות את המים ואת השורשים. קולאוס משריש מהר, ותוך 1–2 שבועות אפשר לשתול באדמה.',
+  todo:['לקטוף את ניצני הפריחה','להעביר למקום מואר יותר','להסיר עלים נבולים שנוגעים במים','לשתול באדמה כשיש שורשים של 3 ס״מ'],
+  tip:'צביטת הקודקוד גורמת לקולאוס להתפצל ולהיות שיחי וצבעוני.'},
+ 'my-kalanchoe':{sp:'קלנכואה פדצ׳נקו',lat:'Kalanchoe fedtschenkoi',every:7,act:'החלפת מים',light:'שמש ישירה או אור חזק',temp:'12–30°',hum:'20–40%',health:['bad','דחוף לטפל'],
+  cond:'סוקולנט עם עלים כחלחלים משוננים ושורשים אוויריים לאורך הגבעול, כלומר הוא כבר משריש. אבל המים בבקבוק עכורים וחומים עם שאריות אדמה, וכמה עלים תחתונים מצהיבים. סוקולנט במים עומדים נמצא בסיכון גבוה לריקבון.',
+  pot:'בקבוק זכוכית מתאים לייחורים, אבל לא לסוקולנט לאורך זמן, והמים בו מלוכלכים. מומלץ לשתול כבר השבוע בעציץ קטן (8–10 ס״מ) עם חורי ניקוז ותערובת לקקטוסים.',
+  todo:['להחליף מים ולנקות את הבקבוק היום','להסיר עלים צהובים','לשתול באדמת סוקולנטים השבוע','אחרי השתילה להשקות רק כשהאדמה יבשה לגמרי'],
+  tip:'באדמה הוא יסתפק בהשקיה פעם ב-2–3 שבועות, ובחורף אפילו פחות.'},
+ 'my-croton':{sp:'קרוטון',lat:'Codiaeum variegatum',every:6,light:'בהיר מאוד, קצת שמש ישירה',temp:'18–29°',hum:'50–70%',health:['warn','חסר אור'],
+  cond:'עלים כהים עם עורקים צהובים ושוליים אדמדמים, צבעוניות טובה. יש רק 4–5 עלים, ובאחד מהם חור יבש ושוליים חומים. קרוטון משיר עלים כשמזיזים אותו או כשאין מספיק אור. ליד הטלוויזיה כנראה חשוך מדי בשבילו, והחום מהמסך מייבש.',
+  pot:'עציץ הקרמיקה הלבן עם הצלחת מתאים בגודל ובסגנון. צריך לוודא שאין מים בצלחת. הבעיה היא המיקום, לא העציץ.',
+  todo:['להעביר ליד חלון מואר (מזרח או מערב)','להרחיק ממקורות חום וממזגן','לנגב אבק מהעלים','לא להזיז שוב אחרי שמוצאים לו מקום'],
+  tip:'קרוטון לא אוהב שינויים. אחרי מעבר מקום הוא עלול להשיר עלה או שניים, וזה עובר.'},
+ 'my-sansevieria':{sp:'סנסווריה לורנטי',lat:'Dracaena trifasciata \'Laurentii\'',every:21,light:'כל אור, מעדיפה בהיר',temp:'15–30°',hum:'30–50%',health:['bad','במצוקה'],
+  cond:'העלים מסולסלים, מקומטים ומקופלים לאורכם, וכמה עלים נחתכו או נשברו (רואים גדמים). קימוט וקיפול כאלה הם סימן ללחץ מים: או שהשורשים היו יבשים מדי לאורך זמן, או שעודף מים פגע בהם והם לא מצליחים לשתות. אם בסיס העלים רך או חום, זה ריקבון.',
+  pot:'קרמיקה עם זיגוג סדוק יפה ועם צלחת. אבל העציץ גבוה וגדול ביחס לכמות העלים, והאדמה טרייה ודחוסה. הרבה אדמה רטובה סביב מעט שורשים זה מצב מסוכן לסנסווריה. אם הבסיס רך, כדאי להוציא, לחתוך שורשים רקובים ולשתול בעציץ קטן יותר עם אדמת קקטוסים.',
+  todo:['לא להשקות לפחות 3 שבועות','למשש את בסיס העלים: רך = ריקבון','לרוקן את הצלחת','להעביר למקום מואר יותר'],
+  tip:'הטעות הנפוצה עם סנסווריה היא יותר מדי מים. עדיף לשכוח אותה מאשר לטפל בה יותר מדי.'},
+ 'my-dieffenbachia':{sp:'דיפנבכיה',lat:'Dieffenbachia seguine',every:8,light:'בהיר עקיף',temp:'18–28°',hum:'50–60%',health:['warn','גזע חשוף'],
+  cond:'עלים ירוקים עם כתמים בהירים, נראים חיוניים, ויש עלים חדשים למעלה. הגזע התחתון חשוף ויש עליו צלקות של עלים שנשרו, ושני עלים בקצה מקופלים מעט. זה דפוס נפוץ כשהאור חלש: הצמח גדל לגובה ומשיר את העלים התחתונים.',
+  pot:'סל הנצרים על הרגליים מעולה עיצובית ומגביה את הצמח לאור. בתוכו יש ציפוי ניילון שמחזיק מים, אז אחרי השקיה צריך לבדוק שלא נאספים מים בתחתית. ליד הדלת יש זרם אוויר קר בחורף, וכדאי להתרחק ממנו.',
+  todo:['לבדוק שאין מים עומדים בתוך הניילון','להרחיק מהדלת בימים קרים','לסובב פעם בשבוע'],
+  tip:'דיפנבכיה רעילה לחיות מחמד ולילדים. כשגוזמים, כדאי לעבוד עם כפפות.'},
  monstera:{sp:'מונסטרה',lat:'Monstera deliciosa',every:7,light:'בהיר עקיף',temp:'18–27°',hum:'60–80%',tip:'נגב את העלים מאבק פעם בשבועיים, כדי שינשמו ויקלטו אור.'},
  snake:{sp:'סנסווריה',lat:'Sansevieria trifasciata',every:14,light:'כל אור',temp:'15–29°',hum:'30–50%',tip:'עדיף פחות מים מיותר. האדמה צריכה להתייבש לגמרי בין השקיות.'},
  pothos:{sp:'פוטוס זהוב',lat:'Epipremnum aureum',every:6,light:'בינוני',temp:'17–30°',hum:'40–60%',tip:'כשהענפים ארוכים מדי, גזום מעל עלה והכנס את הייחור למים.'},
@@ -235,19 +296,31 @@ const T={
  cactus:{sp:'קקטוס כדורי',lat:'Echinocactus grusonii',every:21,light:'שמש ישירה',temp:'10–32°',hum:'10–30%',tip:'בחורף כמעט בלי מים. הוא נח ואוגר כוח לפריחה באביב.'}
 };
 const START=[
- {id:1,name:'מוני',type:'monstera',room:'סלון',last:7},
- {id:2,name:'לילי',type:'lily',room:'משרד',last:5},
- {id:3,name:'פוטוס המטבח',type:'pothos',room:'מטבח',last:4},
- {id:4,name:'שרי',type:'fern',room:'חדר אמבטיה',last:2},
- {id:5,name:'סנסי',type:'snake',room:'חדר שינה',last:9},
- {id:6,name:'זי',type:'zz',room:'מסדרון',last:12},
- {id:7,name:'קוצי',type:'cactus',room:'מרפסת',last:10}
-];
-const KEY='plantglass1';
-const fresh=()=>({tab:'today',seg:'today',plants:START.map(p=>({...p})),done:{},next:8,remind:{time:'08:30',combine:true,weather:true,vacation:false,shared:true,push:false}});
+ {id:1,name:'בזיליקום',type:'my-basil',room:'סלון'},
+ {id:2,name:'פילודנדרון סלואום',type:'my-philodendron',room:'פינת אוכל'},
+ {id:3,name:'דרצנה מסולסלת',type:'my-dracaena',room:'מזנון'},
+ {id:4,name:'מונסטרה אדנסוני',type:'my-adansonii',room:'ליד הטלוויזיה'},
+ {id:5,name:'קיסוס החורש',type:'my-ivy',room:'שולחן הסלון'},
+ {id:6,name:'קולאוס',type:'my-coleus',room:'שולחן הסלון'},
+ {id:7,name:'קלנכואה פדצ׳נקו',type:'my-kalanchoe',room:'שולחן הסלון'},
+ {id:8,name:'קרוטון',type:'my-croton',room:'ליד הטלוויזיה'},
+ {id:9,name:'סנסווריה לורנטי',type:'my-sansevieria',room:'כניסה'},
+ {id:10,name:'דיפנבכיה',type:'my-dieffenbachia',room:'מבואה'}
+];const KEY='yarok-plants-v1';
+const DAY=864e5;
+const dayStart=(t=Date.now())=>{const d=new Date(t);d.setHours(0,0,0,0);return d.getTime()};
+const todayKey=()=>new Date(dayStart()).toISOString().slice(0,10);
+// all ten were watered on the morning of 25 Nov 2026
+const SEED=new Date(2026,10,25).getTime();
+const fresh=()=>({tab:'today',seg:'done',plants:START.map(p=>({...p,at:SEED})),done:Object.fromEntries(START.map(p=>[p.id,'ok'])),doneDay:'2026-11-25',todo:{},next:11,remind:{time:'08:30',combine:true,weather:true,vacation:false,shared:true,push:false}});
 let S;try{S=JSON.parse(localStorage.getItem(KEY))||fresh()}catch(e){S=fresh()}
+S.todo=S.todo||{};
+const sync=()=>{S.plants.forEach(p=>{p.last=Math.max(0,Math.round((dayStart()-dayStart(p.at))/DAY))});if(S.doneDay!==todayKey()){S.done={};S.doneDay=todayKey();S.seg='today'}};
+const setLast=(p,n)=>{p.at=dayStart()-n*DAY;p.last=n};
+sync();
 let sel=null,A={pick:null,stage:0};
-const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const pushPayload=()=>({time:S.remind.time,combine:S.remind.combine,enabled:!!S.remind.push,plants:S.plants.map(p=>({name:p.name,every:I(p).every,act:act(p),at:p.at}))});
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}if(S.remind.push)window.yarokPush?.sync(pushPayload())};
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const $=id=>document.getElementById(id);
 const img=t=>`img/${t}.webp`;
@@ -255,7 +328,9 @@ const I=p=>T[p.type];
 const lvl=p=>Math.max(0,Math.min(1,1-p.last/I(p).every));
 const left=p=>I(p).every-p.last;
 const due=p=>left(p)<=0;
-const state=p=>{const l=lvl(p);return l>=.45?['ok','בריא']:l>.15?['warn','יצמא בקרוב']:['bad','צמא']};
+const act=p=>I(p).act||'השקיה';
+const doneWord=p=>act(p)==='השקיה'?'הושקה':'המים הוחלפו';
+const state=p=>{const l=lvl(p),t=I(p);if(l<=.15)return['bad',act(p)==='השקיה'?'צמא':'להחליף מים'];return t.health||(l>=.45?['ok','בריא']:['warn','יצמא בקרוב'])};
 const when=p=>{const d=left(p);return d<=0?'היום':d===1?'מחר':`בעוד ${d} ימים`};
 const ago=n=>n===0?'היום':n===1?'אתמול':`לפני ${n} ימים`;
 const ic={
@@ -273,32 +348,39 @@ const svg=(k,w=1.8)=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
 function toast(t){const el=$('toast');el.textContent=t;el.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove('show'),1900)}
 function water(id,how){
  const p=S.plants.find(x=>x.id===id);if(!p)return;
- if(how==='wet'){p.last=I(p).every-2;S.done[id]='wet';toast(`נדחה ביומיים, ${p.name} עדיין רטוב`)}
- else if(how==='later'){p.last=I(p).every-1;S.done[id]='later';toast('נזכיר מחר')}
- else{p.last=0;S.done[id]='ok';toast(`${p.name} הושקה`)}
+ if(how==='wet'){setLast(p,I(p).every-2);S.done[id]='wet';toast(`נדחה ביומיים, ${p.name} עדיין רטוב`)}
+ else if(how==='later'){setLast(p,I(p).every-1);S.done[id]='later';toast('נזכיר מחר')}
+ else{setLast(p,0);S.done[id]='ok';toast(`${p.name}: ${doneWord(p)}`)}
  try{navigator.vibrate?.(12)}catch(e){}
  save();render();
 }
 
+function nextDue(){const p=[...S.plants].sort((a,b)=>left(a)-left(b))[0];return p?`${when(p)}: ${p.name}`:'—'}
+function attention(){
+ const L=S.plants.filter(p=>{const h=I(p).health;return h&&h[0]!=='ok'}).sort((a,b)=>(I(a).health[0]==='bad'?0:1)-(I(b).health[0]==='bad'?0:1));
+ if(!L.length)return '';
+ return `<div class="attn glass"><h3>צריכים תשומת לב</h3>${L.map(p=>{const [c,t]=I(p).health;return `<button data-open="${p.id}"><img src="${img(p.type)}" alt=""><span>${esc(p.name)}<small>${esc(I(p).todo?.[0]||'')}</small></span><span class="chip ${c}" style="padding:0;background:none"><span class="dot"></span>${t}</span></button>`}).join('')}</div>`;
+}
 function today(){
  const list=S.plants.filter(p=>due(p)||S.done[p.id]);
  const open=list.filter(p=>!S.done[p.id]).length,total=list.length,done=total-open;
  const upcoming=S.plants.filter(p=>!due(p)&&!S.done[p.id]).sort((a,b)=>left(a)-left(b));
  const C=2*Math.PI*42,frac=total?done/total:1;
  const segList=S.seg==='today'?list.filter(p=>!S.done[p.id]):S.seg==='up'?upcoming:list.filter(p=>S.done[p.id]);
- return `<div class="top"><div><small>יום רביעי, 25 בנובמבר</small><h2>בוקר טוב,<br><b>הורה צמחים</b></h2></div><span class="chip warn glass" style="border:0">☀ 29° מחר</span></div>
+ return `<div class="top"><div><small>${new Date().toLocaleDateString('he-IL',{weekday:'long',day:'numeric',month:'long'})}</small><h2>בוקר טוב,<br><b>הורה צמחים</b></h2></div><span class="chip ok glass" style="border:0">${S.plants.length} צמחים</span></div>
  <div class="hero glass"><div class="ring"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" stroke="rgba(255,255,255,.12)" stroke-width="7" fill="none"/><circle cx="50" cy="50" r="42" stroke="url(#rg)" stroke-width="7" fill="none" stroke-linecap="round" stroke-dasharray="${C*frac} ${C}"/><defs><linearGradient id="rg"><stop offset="0" stop-color="#cfe8a6"/><stop offset="1" stop-color="#8fb57a"/></linearGradient></defs></svg><b>${open}<small>נשארו</small></b></div>
-  <div><h3>${open?`${open===1?'צמח אחד צריך':open+' צמחים צריכים'} מים היום`:'סיימת להיום'}</h3><p>${open?`זה ייקח בערך ${open*2} דקות. ${done?`כבר השקית ${done}.`:''}`:'כל הצמחים מרגישים מצוין.'}</p></div></div>
+  <div><h3>${open?`${open===1?'צמח אחד צריך':open+' צמחים צריכים'} טיפול היום`:'סיימת להיום'}</h3><p>${open?`זה ייקח בערך ${open*2} דקות. ${done?`כבר טיפלת ב-${done}.`:''}`:done?`טיפלת היום ב-${done} צמחים. ההשקיה הבאה ${nextDue()}.`:`ההשקיה הבאה ${nextDue()}.`}</p></div></div>
+ ${attention()}
  <div class="sec">הצמחים שלי<button data-tab="plants">הכל</button></div>
  <div class="strip">${S.plants.map(p=>{const [c,t]=state(p);return `<button class="mini glass" data-open="${p.id}"><img src="${img(p.type)}" alt=""><h3>${esc(p.name)}</h3><span class="chip ${c}" style="padding:2px 0;background:none"><span class="dot"></span>${t}</span></button>`}).join('')}</div>
  <div class="seg glass" role="group" aria-label="סינון משימות"><button data-seg="today" aria-pressed="${S.seg==='today'}">היום</button><button data-seg="up" aria-pressed="${S.seg==='up'}">בקרוב</button><button data-seg="done" aria-pressed="${S.seg==='done'}">בוצע</button></div>
  ${segList.length?segList.map(p=>{const d=S.done[p.id];const isToday=S.seg==='today';return `<article class="task glass ${d?'done':''}">
   <img src="${img(p.type)}" alt="">
-  <div><h3>${d==='ok'||isToday?'השקיה':'השקיה'} · ${esc(p.name)}</h3><p>${svg('drop')}${d==='ok'?'הושקה היום':d==='wet'?'נדחה, האדמה רטובה':d==='later'?'נדחה למחר':isToday?esc(p.room):when(p)}</p></div>
+  <div><h3>${act(p)} · ${esc(p.name)}</h3><p>${svg('drop')}${d==='ok'?doneWord(p)+' היום':d==='wet'?'נדחה, האדמה רטובה':d==='later'?'נדחה למחר':isToday?esc(p.room):when(p)}</p></div>
   ${isToday?`<button class="check" data-w="${p.id}" aria-label="סמן שהשקית את ${esc(p.name)}">${svg('check',2.4)}</button>`:d?`<span class="check on">${svg('check',2.4)}</span>`:`<span class="chip glass" style="border:0">${when(p)}</span>`}
   ${isToday?`<div class="later"><button class="ghost" data-wet="${p.id}">עדיין רטוב</button><button class="ghost" data-later="${p.id}">דחה למחר</button></div>`:''}
  </article>`}).join(''):`<p class="note" style="text-align:center;margin:8px 0">${S.seg==='today'?'אין עוד משימות להיום':S.seg==='done'?'עוד לא סימנת משימות היום':'אין משימות קרובות'}</p>`}
- ${S.remind.weather?`<div class="tip glass"><div><h3>גל חום מחר</h3><p>כדאי להשקות את קוצי ואת שרי הערב, גם אם עוד לא הגיע הזמן.</p></div><span class="big">29°</span></div>`:''}`;
+ ${S.remind.weather?`<div class="tip glass"><div><h3>טיפ לחורף</h3><p>בחורף הצמחים שותים פחות. משקים רק כשהאדמה יבשה, ומקרבים לחלון את מי שצריך אור: הבזיליקום, הקולאוס והקרוטון.</p></div><span class="big">❄</span></div>`:''}`;
 }
 function plants(){
  return `<div class="top"><h2><b>הצמחים שלי</b></h2><small>${S.plants.length} צמחים</small></div>
@@ -314,12 +396,15 @@ function detail(){
   <div class="dhead"><button class="round glass" data-close aria-label="חזרה">${svg('back',2)}</button><button class="round glass" aria-label="עוד">${svg('more',2)}</button></div>
   <div class="dstage"><h2>${esc(p.name)}<small>${t.lat}</small><span class="chip ${c} glass" style="border:0"><span class="dot"></span>${st}</span></h2><img src="${img(p.type)}" alt="${esc(t.sp)}"></div>
   <div class="over glass"><h3>טיפול</h3><div class="facts">
-   <div>${svg('drop')}<b>מים</b>${when(p)}</div><div>${svg('sun')}<b>אור</b>${t.light}</div><div>${svg('temp')}<b>טמפ׳</b>${t.temp}</div><div>${svg('hum')}<b>לחות</b>${t.hum}</div></div></div>
-  <div class="level glass"><div class="row"><div><h3 style="font-size:14px;color:var(--mute);font-weight:400">מים באדמה, הערכה</h3></div><span class="num">${L}<small>%</small></span></div><div class="bar"><i style="width:${Math.max(L,2)}%"></i></div>
-   <p style="margin:10px 0 0;font-size:13px;color:var(--mute)">השקיה אחרונה ${ago(p.last)}. משקים כל ${t.every} ימים, ${esc(p.room)}.</p></div>
-  <div class="over glass"><h3>השקיות ב-4 השבועות האחרונים</h3><div class="hist">${hist.map(h=>`<i class="${h?'on':''}"></i>`).join('')}</div></div>
+   <div>${svg('drop')}<b>${act(p)==='השקיה'?'מים':'מים'}</b>${when(p)}</div><div>${svg('sun')}<b>אור</b>${t.light}</div><div>${svg('temp')}<b>טמפ׳</b>${t.temp}</div><div>${svg('hum')}<b>לחות</b>${t.hum}</div></div></div>
+  ${t.cond?`<div class="over glass"><h3>מצב הצמח</h3><p class="txt">${t.cond}</p></div>`:''}
+  ${t.todo?`<div class="over glass"><h3>מה לעשות</h3><div class="todo">${t.todo.map((x,i)=>{const on=(S.todo[p.id]||[])[i];return `<button class="todoi ${on?'on':''}" data-todo="${p.id}:${i}" aria-pressed="${!!on}"><span class="check ${on?'on':''}">${svg('check',2.4)}</span>${x}</button>`}).join('')}</div></div>`:''}
+  ${t.pot?`<div class="over glass"><h3>העציץ</h3><p class="txt">${t.pot}</p></div>`:''}
+  <div class="level glass"><div class="row"><div><h3 style="font-size:14px;color:var(--mute);font-weight:400">${act(p)==='השקיה'?'מים באדמה, הערכה':'רעננות המים, הערכה'}</h3></div><span class="num">${L}<small>%</small></span></div><div class="bar"><i style="width:${Math.max(L,2)}%"></i></div>
+   <p style="margin:10px 0 0;font-size:13px;color:var(--mute)">${act(p)} אחרונה ${ago(p.last)}. ${act(p)==='השקיה'?'משקים':'מחליפים מים'} כל ${t.every} ימים בחורף. מיקום: ${esc(p.room)}.</p></div>
+  <div class="over glass"><h3>${act(p)==='השקיה'?'השקיות':'החלפות מים'} ב-4 השבועות האחרונים</h3><div class="hist">${hist.map(h=>`<i class="${h?'on':''}"></i>`).join('')}</div></div>
   <div class="tip glass"><div><h3>טיפ</h3><p>${t.tip}</p></div></div>
-  <div class="cta"><button class="btn" data-w="${p.id}">${svg('drop',2)}רשום השקיה</button><button class="btn alt" data-del="${p.id}" aria-label="הסר צמח">✕</button></div>
+  <div class="cta"><button class="btn" data-w="${p.id}">${svg('drop',2)}רשום ${act(p)}</button><button class="btn alt" data-del="${p.id}" aria-label="הסר צמח">✕</button></div>
  </div>`;
 }
 function add(){
@@ -350,6 +435,7 @@ function reminders(){
 }
 const TABS=[['today','היום','M4 11l8-7 8 7v9H4zM10 20v-5h4v5'],['plants','הצמחים','M12 21V11C12 6 8 4 4 4c0 5 3 7 8 7zm0 0c0-4 3-7 8-7 0 4-3 7-8 7z'],['add','הוספה','M12 5v14M5 12h14'],['remind','תזכורות','M6 16V11a6 6 0 0 1 12 0v5l2 2H4zM10 21h4']];
 function render(){
+ sync();
  $('tabs').innerHTML=TABS.map(([k,t,d])=>`<button data-tab="${k}" aria-current="${S.tab===k}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"/></svg>${t}</button>`).join('');
  const v=$('view'),y=v.scrollTop;
  v.innerHTML=S.tab==='today'?today():S.tab==='plants'?plants():S.tab==='add'?add():reminders();
@@ -376,6 +462,11 @@ async function systemNotify(title,body){
  }catch(e){}
 }
 async function askPush(){
+ if(window.yarokPush?.configured){
+  const r=await window.yarokPush.enable({...pushPayload(),enabled:true});
+  if(r==='ok'){toast('ההתראות הופעלו. התזכורת תגיע כל בוקר');return true}
+  toast(r==='denied'?'לא ניתנה הרשאה להתראות':'הטלפון הזה לא תומך בהתראות. באייפון: קודם להוסיף למסך הבית');return false;
+ }
  if(!('Notification' in window)){toast('הדפדפן הזה לא תומך בהתראות');return false}
  try{const r=await Notification.requestPermission();if(r==='granted'){toast('ההתראות הופעלו');return true}}catch(e){}
  toast('אין הרשאה להתראות במכשיר הזה');return false;
@@ -387,6 +478,7 @@ document.addEventListener('click',e=>{
  const b=e.target.closest('button');if(!b)return;const d=b.dataset;
  if(d.tab){S.tab=d.tab;sel=null;$('view').scrollTop=0;save();render()}
  else if(d.seg){S.seg=d.seg;save();render()}
+ else if(d.todo){const [id,i]=d.todo.split(':').map(Number);const a=S.todo[id]=S.todo[id]||[];a[i]=!a[i];save();render()}
  else if(d.w){sel=null;water(+d.w,'ok')}
  else if(d.wet)water(+d.wet,'wet');
  else if(d.later)water(+d.later,'later');
@@ -396,22 +488,23 @@ document.addEventListener('click',e=>{
  else if(d.pick){A={pick:d.pick,stage:0};render()}
  else if('scan' in d){A.stage=1;render();setTimeout(()=>{A.stage=2;render()},1700)}
  else if('again' in d){A={pick:null,stage:0};render()}
- else if('save' in d){const t=A.pick;S.plants.push({id:S.next++,name:$('nm').value.trim()||T[t].sp,type:t,room:$('rm').value,last:0});A={pick:null,stage:0};S.tab='plants';save();render();toast(`נוסף. תזכורת ראשונה בעוד ${T[t].every} ימים`)}
+ else if('save' in d){const t=A.pick;S.plants.push({id:S.next++,name:$('nm').value.trim()||T[t].sp,type:t,room:$('rm').value,at:dayStart(),last:0});A={pick:null,stage:0};S.tab='plants';save();render();toast(`נוסף. תזכורת ראשונה בעוד ${T[t].every} ימים`)}
  else if('demo' in d)notify();
  else if('reset' in d)reset();
- else if('nall' in d){openDue().forEach(p=>{p.last=0;S.done[p.id]='ok'});closeN();save();render();toast(S.remind.shared?'סומן לכל בני הבית':'סומן כהושקה')}
- else if('nlater' in d){openDue().forEach(p=>{p.last=I(p).every-1;S.done[p.id]='later'});closeN();save();render();toast('נזכיר מחר ב-'+S.remind.time)}
+ else if('nall' in d){openDue().forEach(p=>{setLast(p,0);S.done[p.id]='ok'});closeN();save();render();toast(S.remind.shared?'סומן לכל בני הבית':'סומן כהושקה')}
+ else if('nlater' in d){openDue().forEach(p=>{setLast(p,I(p).every-1);S.done[p.id]='later'});closeN();save();render();toast('נזכיר מחר ב-'+S.remind.time)}
 });
-document.addEventListener('change',async e=>{const t=e.target;if(t.dataset.r==='push'&&t.checked&&!(await askPush())){t.checked=false;return}if(t.dataset.r){S.remind[t.dataset.r]=t.checked;save();render()}else if(t.id==='r-time'){S.remind.time=t.value;save()}});
+document.addEventListener('change',async e=>{const t=e.target;if(t.dataset.r==='push'&&t.checked&&!(await askPush())){t.checked=false;return}if(t.dataset.r){S.remind[t.dataset.r]=t.checked;if(t.dataset.r==='push'&&!t.checked)window.yarokPush?.sync({...pushPayload(),enabled:false});save();render()}else if(t.id==='r-time'){S.remind.time=t.value;save()}});
 $('t-notif').onclick=()=>{sel=null;S.tab='today';render();notify()};
 $('t-add').onclick=()=>{sel=null;S.tab='add';A={pick:'monstera',stage:0};render()};
 $('t-plant').onclick=()=>{sel=S.plants[0]?.id??null;render()};
 const reset=()=>{S=fresh();sel=null;A={pick:null,stage:0};save();render();toast('הדוגמה אופסה')};
 $('t-reset').onclick=reset;
 render();
-setTimeout(notify,1500);
+setTimeout(()=>{if(openDue().length)notify()},1500);
 if('serviceWorker' in navigator&&window.isSecureContext)navigator.serviceWorker.register('sw.js').catch(()=>{});
 }
 </script>
+<script type="module" src="push.js"></script>
 </body>
 </html>
