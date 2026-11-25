@@ -223,6 +223,17 @@ img.ph{object-fit:cover!important;border-radius:16px;filter:none!important;box-s
 .picks button{padding:6px;cursor:pointer;color:var(--ink);font:500 12px "Heebo",sans-serif;border-radius:18px}
 .picks button[aria-pressed=true]{box-shadow:var(--rim),0 0 0 2px var(--lime)}
 .picks img{width:100%;height:58px;object-fit:contain}
+.kinds{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.kinds button{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 6px 12px;border:0;cursor:pointer;color:var(--ink);font:500 13px "Heebo",sans-serif;text-align:center;border-radius:22px}
+.kinds img{width:100%;height:72px;object-fit:contain;filter:drop-shadow(0 6px 8px rgba(20,50,25,.22))}
+.kinds img[src$="logo-mark.png"]{height:72px;padding:14px;opacity:.55;filter:none}
+.kinds .plus{width:100%;height:72px;display:grid;place-items:center;font:200 44px "Heebo",sans-serif;color:var(--leaf)}
+img[src$="logo-mark.png"]{opacity:.45;filter:none!important;animation:none!important;object-fit:contain;padding:12%}
+.dstage img[src$="logo-mark.png"]{height:180px;align-self:center;margin:0}
+.thumb{width:56px;height:56px;border-radius:18px;object-fit:cover;box-shadow:var(--rim),var(--lift)}
+.cam img.ph{position:absolute;inset:0;width:100%;height:100%;transform:none;left:0;bottom:0;border-radius:0}
+.cam{cursor:pointer}
+.rhead img.ph{border-radius:18px}
 .result{padding:16px;display:flex;flex-direction:column;gap:12px}
 .rhead{display:flex;gap:12px;align-items:center}
 .rhead img{width:72px;height:72px;object-fit:contain}
@@ -279,6 +290,7 @@ body{background:var(--ground)}
     <div class="notif glass" id="notif" role="status" aria-live="polite"></div>
     <main class="view" id="view"></main>
     <input type="file" id="cam" accept="image/*" capture="environment" hidden>
+    <input type="file" id="gal" accept="image/*" hidden>
     <div class="toast" id="toast"></div>
     <nav class="tabs glass" id="tabs"></nav>
   </div></div>
@@ -359,6 +371,31 @@ const T={
  fern:{sp:'שרכן בוסטון',lat:'Nephrolepis exaltata',every:3,light:'עקיף',temp:'16–24°',hum:'60–80%',tip:'אוהב לחות. ריסוס בבוקר או מקום בחדר האמבטיה עושים לו טוב.'},
  cactus:{sp:'קקטוס כדורי',lat:'Echinocactus grusonii',every:21,light:'שמש ישירה',temp:'10–32°',hum:'10–30%',tip:'בחורף כמעט בלי מים. הוא נח ואוגר כוח לפריחה באביב.'}
 };
+/* Catalog for adding a plant. Watering intervals are for winter indoors; im:null means no stock picture. */
+Object.assign(T,{
+ 'cat-ficus-lyrata':{sp:'פיקוס כינורי',lat:'Ficus lyrata',every:8,light:'בהיר, שמש בוקר',temp:'18–29°',hum:'40–60%',im:null,tip:'לא אוהב לזוז ממקומו. מסובבים רבע סיבוב פעם בחודש כדי שיגדל ישר.'},
+ 'cat-ficus-elastica':{sp:'פיקוס גומי',lat:'Ficus elastica',every:9,light:'בהיר עקיף',temp:'16–29°',hum:'40–60%',im:null,tip:'מנגבים את העלים הגדולים במטלית לחה כדי שיבריקו וינשמו.'},
+ 'cat-calathea':{sp:'קלתיאה',lat:'Goeppertia',every:5,light:'מוצל עד בינוני',temp:'18–27°',hum:'60% ומעלה',im:null,tip:'רגישה למי ברז, עדיף מים שעמדו לילה. העלים מתקפלים בלילה, וזה טבעי.'},
+ 'cat-aloe':{sp:'אלוורה',lat:'Aloe vera',every:21,light:'שמש ישירה',temp:'13–30°',hum:'20–40%',im:null,tip:'משקים עמוק, ורק כשהאדמה יבשה לגמרי.'},
+ 'cat-spider':{sp:'כלורופיטום',lat:'Chlorophytum comosum',every:7,light:'בינוני עד בהיר',temp:'13–27°',hum:'40–60%',im:null,tip:'את ה"תינוקות" שנתלים מהצמח אפשר לשתול בעציץ חדש.'},
+ 'cat-anthurium':{sp:'אנתוריום',lat:'Anthurium andraeanum',every:7,light:'בהיר עקיף',temp:'18–29°',hum:'60% ומעלה',im:null,tip:'אוהב לחות גבוהה. מגש עם חלוקים ומים מתחת לעציץ עוזר לפריחה.'},
+ 'cat-orchid':{sp:'סחלב',lat:'Phalaenopsis',every:10,light:'בהיר עקיף',temp:'18–28°',hum:'50–70%',im:null,tip:'משקים בהשריה של 10 דקות ומנקזים היטב. שורשים כסופים = צמא, ירוקים = רווי.'},
+ 'cat-peperomia':{sp:'פפרומיה',lat:'Peperomia',every:10,light:'בינוני עד בהיר',temp:'18–27°',hum:'40–60%',im:null,tip:'העלים העבים אוגרים מים. עדיף לשכוח אותה מאשר להטביע.'},
+ 'cat-pachira':{sp:'עץ הכסף',lat:'Pachira aquatica',every:10,light:'בהיר עקיף',temp:'16–29°',hum:'40–60%',im:null,tip:'משקים כשהחצי העליון של האדמה יבש.'},
+ 'cat-strelitzia':{sp:'ציפור גן עדן',lat:'Strelitzia nicolai',every:9,light:'בהיר מאוד',temp:'18–30°',hum:'40–60%',im:null,tip:'קרעים בעלים הם טבעיים, כך הרוח עוברת דרכם בטבע.'},
+ 'cat-alocasia':{sp:'אלוקזיה',lat:'Alocasia',every:6,light:'בהיר עקיף',temp:'18–29°',hum:'60% ומעלה',im:null,tip:'בחורף היא לפעמים נחה ומשירה עלים. לא להציף במים.'},
+ 'cat-hoya':{sp:'הויה',lat:'Hoya carnosa',every:12,light:'בהיר עקיף',temp:'16–29°',hum:'40–60%',im:null,tip:'לא חותכים את ענפי הפריחה הישנים, הפרחים חוזרים מאותם מקומות.'},
+ 'cat-tradescantia':{sp:'טרדסקנטיה',lat:'Tradescantia zebrina',every:6,light:'בהיר עקיף',temp:'16–28°',hum:'40–60%',im:null,tip:'גדלה מהר. צביטת הקצוות הופכת אותה לשיחית וצפופה.'},
+ 'cat-begonia':{sp:'בגוניה',lat:'Begonia',every:6,light:'בהיר עקיף',temp:'18–26°',hum:'50–70%',im:null,tip:'לא מרטיבים את העלים, משקים ישר לאדמה.'},
+ 'cat-jade':{sp:'קרסולה',lat:'Crassula ovata',every:18,light:'שמש ישירה',temp:'10–30°',hum:'20–40%',im:null,tip:'עלים מקומטים = צמא. עלים רכים ושקופים = יותר מדי מים.'},
+ 'cat-rosemary':{sp:'רוזמרין',lat:'Salvia rosmarinus',every:5,light:'שמש ישירה',temp:'10–30°',hum:'30–50%',im:null,tip:'אוהב מרפסת שמשית. בתוך הבית הוא נחלש.'},
+ 'cat-mint':{sp:'נענע',lat:'Mentha',every:2,light:'שמש חלקית',temp:'15–28°',hum:'50–70%',im:null,tip:'אוהבת אדמה לחה כל הזמן. קוטפים מלמעלה.'},
+ 'cat-succulent':{sp:'סוקולנט',lat:'Succulent',every:18,light:'שמש ישירה',temp:'10–32°',hum:'20–40%',im:null,tip:'משקים רק כשהאדמה יבשה לגמרי.'},
+ 'custom':{sp:'צמח אחר',lat:'',every:7,light:'—',temp:'—',hum:'—',im:null,tip:'אתה מכיר אותו הכי טוב. אפשר לשנות את תדירות ההשקיה לפי מה שעובד לו.'}
+});
+// generic versions of the species already in the house, without the notes about those specific plants
+Object.keys(T).filter(k=>k.startsWith('my-')).forEach(k=>{const {health,cond,pot,todo,...rest}=T[k];T['g-'+k.slice(3)]={...rest,im:k}});
+const CATALOG=['monstera','g-adansonii','pothos','g-philodendron','snake','zz','lily','fern','g-dracaena','g-dieffenbachia','g-croton','cat-ficus-lyrata','cat-ficus-elastica','cat-calathea','cat-alocasia','cat-strelitzia','cat-pachira','cat-spider','cat-anthurium','cat-orchid','cat-hoya','cat-peperomia','cat-begonia','cat-tradescantia','g-ivy','g-coleus','cat-aloe','cactus','cat-jade','g-kalanchoe','cat-succulent','g-basil','cat-mint','cat-rosemary'];
 const START=[
  {id:1,name:'בזיליקום',type:'my-basil',room:'סלון'},
  {id:2,name:'פילודנדרון סלואום',type:'my-philodendron',room:'פינת אוכל'},
@@ -387,12 +424,12 @@ const photoAge=p=>Math.max(0,Math.round((dayStart()-dayStart(p.photoAt))/DAY));
 const photoDue=p=>S.remind.photo&&photoAge(p)>=PHOTO_EVERY;
 const setLast=(p,n)=>{p.at=dayStart()-n*DAY;p.last=n};
 sync();
-let sel=null,A={pick:null,stage:0};
+let sel=null,A={step:'photo'};
 const pushPayload=()=>({time:S.remind.time,combine:S.remind.combine,enabled:!!S.remind.push,plants:S.plants.map(p=>({name:p.name,every:I(p).every,act:act(p),at:p.at,photoAt:p.photoAt,photoEvery:S.remind.photo?PHOTO_EVERY:0}))});
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}if(S.remind.push)window.yarokPush?.sync(pushPayload())};
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const $=id=>document.getElementById(id);
-const img=t=>`img/${t}.webp`;
+const img=t=>{const x=T[t];return x&&x.im===null?'img/logo-mark.png':`img/${x?.im||t}.webp`};
 /* Photos the person takes live in IndexedDB (localStorage is too small for images).
    PH[plantId] = [{id,ts,url}] oldest first; the newest one becomes the plant's picture. */
 const PH={};
@@ -409,8 +446,9 @@ async function shrink(file){
  return new Promise(res=>c.toBlob(res,'image/jpeg',.84));
 }
 let shootFor=null;
-function shoot(id){shootFor=id;const f=$('cam');f.value='';f.click()}
+function shoot(id,gallery){shootFor=id;const f=$(gallery?'gal':'cam');f.value='';f.click()}
 async function onShot(file){
+ if(shootFor==='add'){if(!file)return;try{A.blob=await shrink(file);if(A.url)URL.revokeObjectURL(A.url);A.url=URL.createObjectURL(A.blob);A.step='type';render()}catch(e){toast('לא הצלחתי לקרוא את התמונה')}return}
  const p=S.plants.find(x=>x.id===shootFor);if(!p||!file)return;
  try{
   const blob=await shrink(file),ts=Date.now(),id=await dbPut({plant:p.id,ts,blob});
@@ -419,7 +457,7 @@ async function onShot(file){
  }catch(e){toast('לא הצלחתי לשמור את התמונה')}
 }
 const fmtDay=ts=>new Date(ts).toLocaleDateString('he-IL',{day:'numeric',month:'short'});
-const I=p=>T[p.type];
+const I=p=>p.over?{...T[p.type],...p.over}:T[p.type];
 const lvl=p=>Math.max(0,Math.min(1,1-p.last/I(p).every));
 const left=p=>I(p).every-p.last;
 const due=p=>left(p)<=0;
@@ -437,7 +475,8 @@ const ic={
  more:'<circle cx="6" cy="12" r="1.3"/><circle cx="12" cy="12" r="1.3"/><circle cx="18" cy="12" r="1.3"/>',
  check:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',
  cal:'<rect x="4" y="5" width="16" height="15" rx="3"/><path d="M4 10h16M9 3v4M15 3v4"/>',
- cam:'<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>'
+ cam:'<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
+ img:'<rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="9" cy="9" r="1.6"/><path d="M20 15l-5-5-9 9"/>'
 };
 const svg=(k,w=1.8)=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round">${ic[k]}</svg>`;
 
@@ -523,18 +562,44 @@ function detail(){
   <div class="cta"><button class="btn" data-w="${p.id}">${svg('drop',2)}רשום ${act(p)}</button><button class="btn alt" data-del="${p.id}" aria-label="הסר צמח">✕</button></div>
  </div>`;
 }
+function catList(q){
+ q=(q||'').trim().toLowerCase();
+ const L=CATALOG.filter(k=>!q||T[k].sp.includes(q)||T[k].lat.toLowerCase().includes(q));
+ return L.map(k=>`<button class="glass" data-kind="${k}"><img src="${img(k)}" alt=""><span>${T[k].sp}</span></button>`).join('')+
+  `<button class="glass other" data-kind="custom"><span class="plus">+</span><span>צמח אחר</span></button>`;
+}
+async function addPlant(){
+ const t=T[A.kind],lw=+$('lw').value,every=A.kind==='custom'?Math.max(1,Math.min(60,+$('ev').value||7)):t.every;
+ const name=$('nm').value.trim()||(A.kind==='custom'?'צמח חדש':t.sp);
+ const p={id:S.next++,name,type:A.kind,room:$('rm').value,at:0,photoAt:Date.now()};
+ if(A.kind==='custom')p.over={every,sp:name};
+ setLast(p,lw<0?every:lw);
+ S.plants.push(p);
+ if(A.blob){try{const ts=Date.now(),id=await dbPut({plant:p.id,ts,blob:A.blob});(PH[p.id]=PH[p.id]||[]).push({id,ts,url:URL.createObjectURL(A.blob)})}catch(e){}}
+ A={step:'photo'};S.tab='plants';sel=p.id;save();render();
+ toast(lw<0?`${name} נוסף. כדאי להשקות אותו היום`:`${name} נוסף. ${act(p)} הבאה ${when(p)}`);
+}
 function add(){
- const picks=['monstera','lily','snake','fern'];
- if(A.stage===2){const t=T[A.pick];return `<div class="top"><h2><b>זיהינו את הצמח</b></h2></div>
-  <div class="result glass"><div class="rhead"><img src="${img(A.pick)}" alt=""><div><h3 style="font-size:20px">${t.sp}</h3><small style="color:var(--mute);direction:ltr;display:block;text-align:right">${t.lat}</small><span class="chip ok" style="padding:0;background:none;margin-top:4px"><span class="dot"></span>התאמה של 94%</span></div></div>
-  <div class="facts"><div>${svg('drop')}<b>מים</b>כל ${t.every} ימים</div><div>${svg('sun')}<b>אור</b>${t.light}</div><div>${svg('temp')}<b>טמפ׳</b>${t.temp}</div><div>${svg('hum')}<b>לחות</b>${t.hum}</div></div>
-  <label class="field" for="nm">איך לקרוא לו?<input id="nm" value="${t.sp} חדש"></label>
-  <label class="field" for="rm">איפה הוא נמצא?<select id="rm"><option>סלון</option><option>מטבח</option><option>חדר שינה</option><option>מרפסת</option><option>חדר אמבטיה</option></select></label>
-  <div class="cta"><button class="btn" data-save>הוסף לצמחים שלי</button><button class="btn alt" data-again aria-label="צלם שוב">↺</button></div></div>`}
- return `<div class="top"><div><h2><b>צמח חדש</b></h2><small>${A.stage?'מזהה את הצמח…':'בחר תמונה לדוגמה, כאילו צילמת אותה'}</small></div></div>
- <div class="cam glass">${A.pick?`<img src="${img(A.pick)}" alt="">`:''}<div class="frame"></div>${A.stage?'<div class="scan"></div>':''}${A.pick?'':'<span class="camhint chip glass" style="border:0">כוון את המצלמה לצמח</span>'}</div>
- <div class="picks">${picks.map(k=>`<button class="glass" data-pick="${k}" aria-pressed="${A.pick===k}"><img src="${img(k)}" alt="">${T[k].sp}</button>`).join('')}</div>
- <button class="btn" data-scan ${A.pick&&!A.stage?'':'disabled'}>זהה את הצמח</button>`;
+ const rooms=[...new Set(['סלון','מטבח','חדר שינה','מרפסת','חדר אמבטיה','כניסה',...S.plants.map(p=>p.room)])];
+ const shot=A.url?`<img src="${A.url}" class="ph" alt="">`:'';
+ if(A.step==='photo')return `<div class="top"><div><h2><b>צמח חדש</b></h2><small>קודם תמונה, אחר כך נבחר מה הוא</small></div></div>
+  <div class="cam glass" data-take>${shot}<div class="frame"></div><span class="camhint chip glass" style="border:0">${svg('cam')} לחץ כדי לצלם</span></div>
+  <div class="cta"><button class="btn" data-take>${svg('cam',2)}צלם את הצמח</button><button class="btn alt" data-gal aria-label="בחר מהגלריה">${svg('img',2)}</button></div>
+  <button class="small" data-skip>המשך בלי תמונה</button>`;
+ if(A.step==='type')return `<div class="top"><div><h2><b>איזה צמח זה?</b></h2><small>בחר מהרשימה, או "צמח אחר"</small></div>${A.url?`<img src="${A.url}" class="thumb" alt="">`:''}</div>
+  <label class="field" for="q"><input id="q" type="search" placeholder="חיפוש: פיקוס, סחלב, monstera…" value="${esc(A.q||'')}" autocomplete="off"></label>
+  <div class="kinds" id="kinds">${catList(A.q)}</div>
+  <button class="small" data-back="photo">חזרה לתמונה</button>`;
+ const t=T[A.kind],custom=A.kind==='custom';
+ return `<div class="top"><div><h2><b>כמעט סיימנו</b></h2><small>${custom?'צמח אחר':t.sp}${t.lat?` · <i dir="ltr">${t.lat}</i>`:''}</small></div></div>
+  <div class="result glass">
+   <div class="rhead"><img src="${A.url||img(A.kind)}"${A.url?' class="ph"':''} alt=""><div><h3 style="font-size:20px">${custom?'צמח חדש':t.sp}</h3>${custom?'':`<small style="color:var(--mute)">${t.light} · כל ${t.every} ימים</small>`}</div></div>
+   <label class="field" for="nm">שם<input id="nm" value="${custom?'':t.sp}" placeholder="${custom?'למשל: הצמח מהמטבח':''}"></label>
+   ${custom?`<label class="field" for="ev">כל כמה ימים להשקות?<input id="ev" type="number" inputmode="numeric" min="1" max="60" value="7"></label>`:''}
+   <label class="field" for="rm">איפה הוא נמצא?<select id="rm">${rooms.map(x=>`<option>${esc(x)}</option>`).join('')}</select></label>
+   <label class="field" for="lw">מתי השקית אותו לאחרונה?<select id="lw"><option value="0">היום</option><option value="1">אתמול</option><option value="3">לפני כמה ימים</option><option value="7">לפני שבוע</option><option value="-1">לא זוכר</option></select></label>
+   <div class="cta"><button class="btn" data-addsave>הוסף לצמחים שלי</button><button class="btn alt" data-back="type" aria-label="חזרה">${svg('back',2)}</button></div>
+  </div>`;
 }
 function reminders(){
  const R=S.remind,sw=(k,t,s)=>`<label class="set glass" for="r-${k}"><div><b>${t}</b><small>${s}</small></div><input type="checkbox" class="sw" id="r-${k}" data-r="${k}" ${R[k]?'checked':''}></label>`;
@@ -697,23 +762,27 @@ document.addEventListener('click',e=>{
  else if(d.open){sel=+d.open;render()}
  else if('close' in d){sel=null;render()}
  else if(d.del){S.plants=S.plants.filter(p=>p.id!==+d.del);sel=null;save();render();toast('הצמח הוסר')}
- else if(d.pick){A={pick:d.pick,stage:0};render()}
- else if('scan' in d){A.stage=1;render();setTimeout(()=>{A.stage=2;render()},1700)}
- else if('again' in d){A={pick:null,stage:0};render()}
- else if('save' in d){const t=A.pick;S.plants.push({id:S.next++,name:$('nm').value.trim()||T[t].sp,type:t,room:$('rm').value,at:dayStart(),last:0});A={pick:null,stage:0};S.tab='plants';save();render();toast(`נוסף. תזכורת ראשונה בעוד ${T[t].every} ימים`)}
+ else if('take' in d)shoot('add');
+ else if('gal' in d)shoot('add',true);
+ else if('skip' in d){A.step='type';render()}
+ else if(d.back){A.step=d.back;render()}
+ else if(d.kind){A.kind=d.kind;A.step='details';render()}
+ else if('addsave' in d)addPlant();
  else if('demo' in d)notify();
  else if('reset' in d)reset();
  else if('nall' in d){openDue().forEach(p=>{setLast(p,0);S.done[p.id]='ok'});closeN();save();render();toast(S.remind.shared?'סומן לכל בני הבית':'סומן כהושקה')}
  else if('nlater' in d){openDue().forEach(p=>{setLast(p,I(p).every-1);S.done[p.id]='later'});closeN();save();render();toast('נזכיר מחר ב-'+S.remind.time)}
 });
+document.addEventListener('input',e=>{if(e.target.id==='q'){A.q=e.target.value;$('kinds').innerHTML=catList(A.q)}});
 document.addEventListener('change',async e=>{const t=e.target;if(t.dataset.r==='push'&&t.checked&&!(await askPush())){t.checked=false;return}if(t.dataset.r){S.remind[t.dataset.r]=t.checked;if(t.dataset.r==='push'&&!t.checked)window.yarokPush?.sync({...pushPayload(),enabled:false});save();render()}else if(t.id==='r-time'){S.remind.time=t.value;save()}});
 $('t-notif').onclick=()=>{sel=null;S.tab='today';render();notify()};
-$('t-add').onclick=()=>{sel=null;S.tab='add';A={pick:'monstera',stage:0};render()};
+$('t-add').onclick=()=>{sel=null;S.tab='add';A={step:'photo'};render()};
 $('t-plant').onclick=()=>{sel=S.plants[0]?.id??null;render()};
-const reset=()=>{S=fresh();sel=null;A={pick:null,stage:0};save();render();toast('הדוגמה אופסה')};
+const reset=()=>{S=fresh();sel=null;A={step:'photo'};save();render();toast('הדוגמה אופסה')};
 $('t-reset').onclick=reset;
 render();
 $('cam').addEventListener('change',e=>onShot(e.target.files[0]));
+$('gal').addEventListener('change',e=>onShot(e.target.files[0]));
 loadPhotos();
 setTimeout(()=>{if(openDue().length||S.plants.some(p=>photoDue(p)&&!S.shot[p.id]))notify()},1500);
 if('serviceWorker' in navigator&&window.isSecureContext)navigator.serviceWorker.register('sw.js').catch(()=>{});
