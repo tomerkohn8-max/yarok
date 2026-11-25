@@ -1,5 +1,5 @@
 // Caches the app shell so it opens offline; bump VERSION when files change.
-const VERSION = 'yarok-v4';
+const VERSION = 'yarok-v5';
 const ASSETS = [
   './', 'index.html', 'manifest.webmanifest', 'push.js', 'firebase-config.js',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png', 'icons/badge-96.png',
