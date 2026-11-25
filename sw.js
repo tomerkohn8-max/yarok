@@ -1,8 +1,8 @@
 // Caches the app shell so it opens offline; bump VERSION when files change.
-const VERSION = 'yarok-v3';
+const VERSION = 'yarok-v4';
 const ASSETS = [
   './', 'index.html', 'manifest.webmanifest', 'push.js', 'firebase-config.js',
-  'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png',
+  'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png', 'icons/badge-96.png',
   'img/bg.webp', 'img/monstera.webp', 'img/snake.webp', 'img/pothos.webp',
   'img/lily.webp', 'img/zz.webp', 'img/fern.webp', 'img/cactus.webp',
   'img/my-basil.webp', 'img/my-philodendron.webp', 'img/my-dracaena.webp', 'img/my-adansonii.webp',
@@ -42,7 +42,7 @@ self.addEventListener('push', e => {
   e.waitUntil(self.registration.showNotification(msg.title || 'ירוק בבית', {
     body: msg.body || 'הצמחים מחכים לך',
     icon: 'icons/icon-192.png',
-    badge: 'icons/icon-192.png',
+    badge: 'icons/badge-96.png',
     tag: 'daily',
     lang: 'he',
     dir: 'rtl',
