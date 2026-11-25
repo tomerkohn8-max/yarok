@@ -1,6 +1,6 @@
 // Sends the daily watering reminder. Runs hourly from GitHub Actions.
 // Each device gets at most one reminder a day, at or after its chosen hour,
-// and only when at least one plant is due.
+// and only when a plant needs water or its fortnightly photo.
 import admin from 'firebase-admin';
 
 const DAY = 864e5;
@@ -42,10 +42,19 @@ for (const doc of snap.docs) {
   if (d.lastSent === day || hour < remindHour) continue;
 
   const today = dayNumber(day);
-  const due = (d.plants || []).filter(p => today - dayNumber(local(new Date(p.at), tz).day) >= p.every);
-  if (!due.length) continue;
+  const age = at => today - dayNumber(local(new Date(at), tz).day);
+  const due = (d.plants || []).filter(p => age(p.at) >= p.every);
+  const shots = (d.plants || []).filter(p => p.photoEvery && p.photoAt && age(p.photoAt) >= p.photoEvery);
+  if (!due.length && !shots.length) continue;
 
-  const { title, body } = message(due, d.combine !== false);
+  let title, body;
+  if (due.length) {
+    ({ title, body } = message(due, d.combine !== false));
+    if (shots.length) body += ` · וגם יום צילום: ${shots.map(p => p.name).join(', ')}`;
+  } else {
+    title = 'יום צילום 📸';
+    body = `הגיע הזמן לצלם את ${shots.map(p => p.name).join(', ')} ולראות כמה ${shots.length > 1 ? 'הם גדלו' : 'הוא גדל'}`;
+  }
   try {
     await admin.messaging().send({
       token: d.token,
