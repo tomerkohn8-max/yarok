@@ -184,6 +184,8 @@ input[type=date]{font:16px "Heebo",sans-serif}
 .pot .sprout{transform-origin:50px 40px;animation:sway 5s ease-in-out infinite}
 @keyframes sway{50%{transform:rotate(-5deg)}}
 .capsule{grid-template-columns:minmax(0,1fr) 110px}
+.capsule>div{display:flex;flex-direction:column;align-items:flex-start}
+.capsule .sub{display:block;margin:0 0 16px}
 .prow{display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap}
 .due{display:inline-flex;align-items:center;gap:4px;font:600 12px "Heebo",sans-serif;padding:4px 9px;border-radius:999px;background:rgba(212,243,107,.16);color:var(--lime);white-space:nowrap}
 .due svg{width:12px!important;height:12px!important}
@@ -685,7 +687,7 @@ function dueLab(p){const d=left(p);return d<0?`באיחור ${-d} ${-d===1?'יו
 function dueCls(p){const d=left(p);return d<=0?'bad':d<=2?'warn':'ok'}
 function potCard(pct,healthy){
  const top=18,bot=128,y=bot-(bot-top)*Math.max(.05,pct/100);
- return `<div class="capsule"><div><small>מרגישים מצוין</small><div class="pct">${pct}%</div><small>${healthy} מתוך ${S.plants.length} צמחים</small><button class="lp" data-tab="plants" style="margin-top:12px">לכל הצמחים</button></div>
+ return `<div class="capsule"><div><small>מרגישים מצוין</small><div class="pct">${pct}%</div><small class="sub">${healthy} מתוך ${S.plants.length} צמחים</small><button class="lp" data-tab="plants">לכל הצמחים</button></div>
  <svg class="pot" viewBox="0 0 100 160" aria-label="${pct}% מהצמחים בריאים">
   <defs><clipPath id="potIn"><path d="M13 40H87L76 150Q75 155 69 155H31Q25 155 24 150Z"/></clipPath>
   <linearGradient id="liq" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d4f36b"/><stop offset="1" stop-color="#79c34a"/></linearGradient></defs>
