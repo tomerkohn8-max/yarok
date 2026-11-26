@@ -121,6 +121,29 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 .banner b{display:block;font-size:16px}
 .banner small{color:var(--mute);font-size:13px}
 .lp{border:0;cursor:pointer;font:700 15px "Heebo",sans-serif;padding:12px 20px;border-radius:999px;color:var(--deep);background:linear-gradient(180deg,#e6fb93,#c4e95a);box-shadow:inset 0 1.5px 1px #fff,inset 0 -2px 4px rgba(60,120,20,.25),0 8px 16px -8px rgba(60,120,20,.8);white-space:nowrap}
+/* watering queue: every pot, most urgent first, each with a countdown ring */
+.queue{display:flex;flex-direction:column;gap:10px}
+.qrow{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:10px;padding:8px 12px 8px 10px;border-radius:26px}
+.qrow.bad{box-shadow:var(--rim),inset 0 0 0 1.5px rgba(255,171,149,.6),var(--lift)}
+.qmain{display:flex;align-items:center;gap:10px;background:none;border:0;padding:0;color:var(--ink);font:inherit;text-align:start;cursor:pointer;min-width:0}
+.qmain img{width:52px;height:52px;flex:none;object-fit:contain;filter:drop-shadow(0 6px 8px rgba(5,25,10,.35))}
+.qmain span{display:flex;flex-direction:column;min-width:0}
+.qmain b{font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.qmain small{font-size:12px;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cd{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:64px}
+.cd small{font-size:11px;color:var(--mute);white-space:nowrap}
+.ringc{position:relative;width:46px;height:46px}
+.ringc svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ringc .tr{fill:none;stroke:rgba(255,255,255,.14);stroke-width:5}
+.ringc .pr{fill:none;stroke-width:5;stroke-linecap:round;stroke:var(--lime);animation:ringin 1s cubic-bezier(.25,.8,.3,1)}
+@keyframes ringin{from{stroke-dasharray:0 200}}
+.ringc b{position:absolute;inset:0;display:grid;place-items:center;font:800 17px "Heebo",sans-serif}
+.qrow.warn .pr{stroke:var(--sun)}.qrow.warn .cd small{color:var(--sun)}
+.qrow.bad .pr{stroke:var(--red)}.qrow.bad .cd small{color:var(--red);font-weight:600}
+.qrow.bad .ringc .tr{stroke:rgba(255,171,149,.5);animation:beat 1.6s ease-in-out infinite;transform-origin:center}
+.qact{display:flex;flex-direction:column;align-items:center;gap:4px}
+.qact .check{width:40px;height:40px;color:var(--water)}
+.mini-g{border:0;background:none;color:var(--mute);font:500 11px "Heebo",sans-serif;cursor:pointer;padding:0}
 /* tip of the day */
 .quote{padding:22px 20px 20px;border-radius:30px;background:linear-gradient(160deg,#28503a,#1b3a28);box-shadow:inset 0 0 0 1px rgba(212,243,107,.25),inset 0 1px 0 rgba(255,255,255,.2),0 18px 34px -18px rgba(5,25,10,.8);position:relative;overflow:hidden}
 .quote::before{content:"”";position:absolute;top:-34px;left:14px;font:800 120px "Heebo",sans-serif;color:rgba(255,255,255,.08)}
@@ -561,20 +584,27 @@ function today(){
    <button class="stat lightg"${nd?` data-open="${nd.id}"`:''}><b>${nd?(left(nd)<=0?'היום':left(nd)):'—'}${nd&&left(nd)>0?'<small>ימים</small>':''}</b><span>השקיה הבאה${nd?' · '+esc(nd.name):''}</span></button>
   </div>
   ${open?`<div class="banner"><span class="ico">${svg('drop',2)}</span><div><b>${open===1?'צמח אחד מחכה':open+' צמחים מחכים'} למים</b><small>${esc(openL.map(p=>p.name).join(', '))}</small></div><button class="lp" data-nall>השקיתי הכל</button></div>`
-  :`<div class="banner"><span class="ico">${svg('cam',2)}</span><div><b>יום הצילום הבא</b><small>${nextShot?`בעוד ${nextShot} ימים`:'היום'}, כדי לראות אותם גדלים</small></div><button class="lp" data-tab="photos">לתמונות</button></div>`}
+  :''}
  </section>
+ ${queue()}
  ${tipP?`<div class="quote"><small>הטיפ של היום · ${esc(tipP.name)}</small><p>${I(tipP).tip}</p></div>`:''}
  <div class="capsule"><div><small>מרגישים מצוין</small><div class="pct">${pct}%</div><button class="lp" data-tab="plants">לכל הצמחים</button></div>
   <div class="tube" aria-label="${pct}% מהצמחים בריאים"><div class="liquid" style="height:${Math.max(6,pct)}%"><svg viewBox="0 0 200 14" preserveAspectRatio="none" aria-hidden="true"><path d="M0 7Q25 0 50 7T100 7T150 7T200 7V14H0z" fill="currentColor"/></svg></div><i class="bub" style="left:30px"></i><i class="bub" style="left:58px;animation-delay:-1.6s"></i><i class="bub" style="left:44px;animation-delay:-3s"></i></div></div>
  ${attention()}
- <div class="seg glass" role="group" aria-label="סינון משימות"><button data-seg="today" aria-pressed="${S.seg==='today'}">היום</button><button data-seg="up" aria-pressed="${S.seg==='up'}">בקרוב</button><button data-seg="done" aria-pressed="${S.seg==='done'}">בוצע</button></div>
- ${segList.length?segList.map(p=>{const d=S.done[p.id];const isToday=S.seg==='today';return `<article class="task glass ${d?'done':''}">
-  <img src="${pic(p)}"${phc(p)} alt="">
-  <div><h3>${act(p)} · ${esc(p.name)}</h3><p>${svg('drop')}${d==='ok'?doneWord(p)+' היום':d==='wet'?'נדחה, האדמה רטובה':d==='later'?'נדחה למחר':isToday?esc(p.room):when(p)}</p></div>
-  ${isToday?`<button class="check" data-w="${p.id}" aria-label="סמן שהשקית את ${esc(p.name)}">${svg('check',2.4)}</button>`:d?`<span class="check on">${svg('check',2.4)}</span>`:`<span class="chip glass" style="border:0">${when(p)}</span>`}
-  ${isToday?`<div class="later"><button class="ghost" data-wet="${p.id}">עדיין רטוב</button><button class="ghost" data-later="${p.id}">דחה למחר</button></div>`:''}
- </article>`}).join(''):`<p class="note" style="text-align:center;margin:8px 0">${S.seg==='today'?'אין עוד משימות להיום':S.seg==='done'?'עוד לא סימנת משימות היום':'אין משימות קרובות'}</p>`}
  ${photoBlock()}`;
+}
+function queue(){
+ const L=[...S.plants].sort((a,b)=>left(a)-left(b)),C=2*Math.PI*20;
+ const late=L.filter(p=>left(p)<=0&&!S.done[p.id]).length;
+ return `<div class="sec">לפי סדר השקיה<small style="color:var(--mute);font-weight:400">${late?`${late} צריכים עכשיו`:'אין דחופים'}</small></div>
+ <div class="queue">${L.map(p=>{
+  const d=left(p),ev=I(p).every,frac=Math.max(0,Math.min(1,d/ev)),cls=d<=0?'bad':d<=2?'warn':'ok',done=S.done[p.id]==='ok';
+  const lab=d<0?`באיחור ${-d} ${-d===1?'יום':'ימים'}`:d===0?'היום':d===1?'מחר':`בעוד ${d} ימים`;
+  return `<div class="qrow glass ${cls}">
+   <button class="qmain" data-open="${p.id}"><img src="${pic(p)}"${phc(p)} alt=""><span><b>${esc(p.name)}</b><small>${act(p)} · ${esc(p.room)}${done?' · '+doneWord(p)+' היום':''}</small></span></button>
+   <div class="cd" aria-label="${act(p)} ${lab}"><div class="ringc"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="20" class="tr"/><circle cx="24" cy="24" r="20" class="pr" stroke-dasharray="${(C*frac).toFixed(1)} ${C.toFixed(1)}"/></svg><b>${d<=0?(d<0?'+'+(-d):'0'):d}</b></div><small>${lab}</small></div>
+   ${d<=0&&!done?`<div class="qact"><button class="check" data-w="${p.id}" aria-label="סמן ${act(p)} ל${esc(p.name)}">${svg('drop',2)}</button><button class="mini-g" data-wet="${p.id}">רטוב</button></div>`:''}
+  </div>`}).join('')}</div>`;
 }
 function gallery(){
  const withP=S.plants.filter(p=>PH[p.id]?.length),total=withP.reduce((n,p)=>n+PH[p.id].length,0);
