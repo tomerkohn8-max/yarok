@@ -11,6 +11,13 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ירוק בבית">
+<meta property="og:title" content="Yarok">
+<meta property="og:description" content="אפליקציה לטיפול בצמחי בית: תזכורות השקיה, יומן צמיחה ומצב חופשה.">
+<meta property="og:image" content="https://tomerkohn8-max.github.io/yarok/icons/og.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta property="og:url" content="https://tomerkohn8-max.github.io/yarok/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
@@ -1008,7 +1015,8 @@ document.addEventListener('click',e=>{
  else if(d.trip==='share'){const txt=tripText();if(navigator.share)navigator.share({text:txt}).catch(()=>{});else navigator.clipboard?.writeText(txt).then(()=>toast('התוכנית הועתקה')).catch(()=>toast('לא הצלחתי להעתיק'))}
  else if('tipx' in d){S.tipSeen=todayKey();save();const t=$('tipPop');t.classList.remove('show');setTimeout(()=>t.remove(),450)}
  else if('shareapp' in d){const url='https://tomerkohn8-max.github.io/yarok/',text='🌿 Yarok – אפליקציה לטיפול בצמחי בית: תזכורות השקיה, יומן צמיחה ומצב חופשה.';
-  if(navigator.share)navigator.share({title:'Yarok',text,url}).catch(()=>{});
+  if(navigator.share)(async()=>{let files;try{const b=await (await fetch('icons/icon-512.png')).blob();const f=new File([b],'yarok.png',{type:'image/png'});if(navigator.canShare?.({files:[f]}))files=[f]}catch(e){}
+   navigator.share(files?{title:'Yarok',text:text+'\n'+url,files}:{title:'Yarok',text,url}).catch(()=>{})})();
   else navigator.clipboard?.writeText(text+' '+url).then(()=>toast('הקישור הועתק')).catch(()=>toast(url))}
  else if('demo' in d)notify();
  else if('reset' in d)reset();
