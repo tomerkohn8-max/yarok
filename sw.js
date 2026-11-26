@@ -1,5 +1,5 @@
 // Caches the app shell so it opens offline; bump VERSION when files change.
-const VERSION = 'yarok-v13';
+const VERSION = 'yarok-v14';
 const ASSETS = [
   './', 'index.html', 'manifest.webmanifest', 'push.js', 'firebase-config.js',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png', 'icons/badge-96.png',
@@ -7,7 +7,8 @@ const ASSETS = [
   'img/lily.webp', 'img/zz.webp', 'img/fern.webp', 'img/cactus.webp',
   'img/my-basil.webp', 'img/my-philodendron.webp', 'img/my-dracaena.webp', 'img/my-adansonii.webp',
   'img/my-ivy.webp', 'img/my-coleus.webp', 'img/my-kalanchoe.webp', 'img/my-croton.webp',
-  'img/my-sansevieria.webp', 'img/my-dieffenbachia.webp'
+  'img/my-sansevieria.webp', 'img/my-dieffenbachia.webp',
+  'img/my-pothos-water.webp', 'img/my-coleus2.webp', 'img/my-basil2.webp', 'img/my-kalanchoe2.webp', 'img/my-pothos2.webp'
 ];
 
 self.addEventListener('install', e => {

@@ -45,10 +45,18 @@ for (const doc of snap.docs) {
   const age = at => today - dayNumber(local(new Date(at), tz).day);
   const due = (d.plants || []).filter(p => age(p.at) >= p.every);
   const shots = (d.plants || []).filter(p => p.photoEvery && p.photoAt && age(p.photoAt) >= p.photoEvery);
-  if (!due.length && !shots.length) continue;
+  // trip mode: one reminder the day before leaving, silence while away
+  const trip = (d.plants || []).find(p => p.trip)?.trip;
+  const leave = trip ? dayNumber(trip.from) : null, back = trip ? dayNumber(trip.to) : null;
+  const preTrip = trip && today === leave - 1;
+  if (trip && today >= leave && today < back) continue;
+  if (!preTrip && !due.length && !shots.length) continue;
 
   let title, body;
-  if (due.length) {
+  if (preTrip) {
+    title = 'מחר יוצאים ✈️';
+    body = `להשקות היום היטב את כל ${(d.plants || []).length} הצמחים ולמלא את הבקבוקים`;
+  } else if (due.length) {
     ({ title, body } = message(due, d.combine !== false));
     if (shots.length) body += ` · וגם יום צילום: ${shots.map(p => p.name).join(', ')}`;
   } else {

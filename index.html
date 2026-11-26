@@ -145,6 +145,21 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 .qact .check{width:40px;height:40px;color:var(--water)}
 .mini-g{border:0;background:none;color:var(--mute);font:500 11px "Heebo",sans-serif;cursor:pointer;padding:0}
 /* tip of the day */
+.trip{padding:16px;display:flex;flex-direction:column;gap:12px}
+.trip .row{display:flex;justify-content:space-between;align-items:center}
+.trip h3{font-size:17px;font-weight:800}
+.tripf{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tsum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
+.tsum div{padding:10px 4px;border-radius:18px;background:rgba(255,255,255,.1);box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+.tsum b{display:block;font:800 26px "Heebo",sans-serif;color:var(--lime);line-height:1.1}
+.tsum small{font-size:12px;color:var(--mute)}
+.tstep{display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px;align-items:start}
+.tstep>span{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font:800 14px "Heebo",sans-serif;color:var(--deep);background:linear-gradient(180deg,#e6fb93,#c4e95a)}
+.tstep b{display:block;font-size:15px}
+.tstep small{display:block;color:var(--mute);font-size:13px;line-height:1.45;margin-top:2px}
+.tstep i{font-style:normal;color:var(--ink);font-weight:600;margin-inline-end:4px}
+a.btn.alt{text-decoration:none;font-size:20px}
+input[type=date]{font:16px "Heebo",sans-serif}
 .quote{padding:22px 20px 20px;border-radius:30px;background:linear-gradient(160deg,#28503a,#1b3a28);box-shadow:inset 0 0 0 1px rgba(212,243,107,.25),inset 0 1px 0 rgba(255,255,255,.2),0 18px 34px -18px rgba(5,25,10,.8);position:relative;overflow:hidden}
 .quote::before{content:"”";position:absolute;top:-34px;left:14px;font:800 120px "Heebo",sans-serif;color:rgba(255,255,255,.08)}
 .quote small{color:var(--lime);font-weight:600;font-size:13px}
@@ -370,6 +385,31 @@ body{background:var(--ground)}
 <script>
 {
 const T={
+ 'my-pothos-water':{sp:'פוטוס מגוון (ייחור במים)',lat:"Epipremnum aureum 'Marble Queen'",every:7,act:'החלפת מים',light:'בהיר עקיף',temp:'17–30°',hum:'40–60%',health:['ok','מוכן לשתילה'],
+  cond:'ייחור חזק עם כמה זרועות ועלים מגוונים בצהוב-לבן, בלי כתמים. השורשים ארוכים ובריאים, הרבה מעל 5 ס״מ, והוא מוכן לעבור לאדמה. המים בבקבוק קצת צהבהבים ועכורים.',
+  pot:'בקבוק זכוכית שקוף טוב, כי רואים בו את השורשים. אבל הצוואר צר והשורשים כבר ארוכים, ולכן יהיה קשה להוציא אותו בלי לשבור. כדאי לשתול עכשיו באדמה, בעציץ של 12 ס״מ, או להעביר לצנצנת רחבה.',
+  todo:['להחליף את המים ולשטוף את הבקבוק','לשתול באדמה, השורשים מוכנים','להרחיק משמש ישירה דרך הזכוכית'],
+  tip:'אחרי מעבר ממים לאדמה, שומרים את האדמה לחה בשבועיים הראשונים כדי שהשורשים יסתגלו.'},
+ 'my-coleus2':{sp:'קולאוס ארגמן',lat:'Coleus scutellarioides',every:5,act:'החלפת מים',light:'בהיר, שמש בוקר',temp:'18–28°',hum:'50–70%',health:['ok','שופע וצבעוני'],
+  cond:'ייחור גדול ושופע עם צבעים חזקים: סגול, ורוד וירוק. זה סימן שהוא מקבל מספיק אור, בניגוד לקולאוס בסלון. בעלה אחד יש כתמים חומים קטנים, כנראה מכוויית שמש דרך הזכוכית. המים בבקבוק ירקרקים מאצות.',
+  pot:'בקבוק זכוכית חלבית. האצות מצטברות בו בגלל האור, וכדאי לשטוף אותו ולהחליף מים. הצמח גבוה וכבד לבקבוק, ולכן כדאי לשתול אותו באדמה בקרוב, בעציץ של 12–15 ס״מ.',
+  todo:['לשטוף את הבקבוק ולהחליף מים','להסיר את העלה עם הכתמים','לצבוט את הקודקוד כדי שיתפצל','לשתול באדמה כשיש שורשים של 3 ס״מ'],
+  tip:'הצבעים של הקולאוס מתחזקים באור טוב. אם הם מתחילים לדהות, זה סימן להזיז אותו לחלון.'},
+ 'my-basil2':{sp:'בזיליקום באדנית',lat:'Ocimum basilicum',every:3,light:'שמש ישירה, 6+ שעות',temp:'18–30°',hum:'40–60%',health:['warn','עלים נבולים'],
+  cond:'בזיליקום גבוה שנתמך במקל, עם עלים ירוקים-בהירים. הרבה עלים מקופלים ותלויים כלפי מטה, סימן לצמא, לחום מאחורי הזכוכית או ללחץ אחרי שתילה טרייה. הגבעול התחתון חשוף ומתעצה. בצד האדנית יש ייחור קטן של סוקולנט, כנראה קרסולה.',
+  pot:'אדנית מלבנית רחבה, טובה לבזיליקום. הבעיה היא השילוב: הבזיליקום צריך מים כל 2–3 ימים, והסוקולנט מעט מאוד. עדיף להעביר את הסוקולנט לעציץ קטן משלו. כדאי לבדוק שיש חורי ניקוז.',
+  todo:['להשקות עמוק אם האדמה יבשה','להעביר את הסוקולנט לעציץ נפרד','לקטום קודקודים מעל זוג עלים','להסיר עלים יבשים מהאדמה'],
+  tip:'בזיליקום מאחורי זכוכית בשמש מתחמם מהר. בצהריים חמים כדאי להרחיק אותו קצת מהחלון.'},
+ 'my-kalanchoe2':{sp:'קלנכואה – תינוקות',lat:'Kalanchoe × laetivirens',every:12,light:'שמש ישירה או אור חזק',temp:'12–30°',hum:'20–40%',health:['ok','צומחים יפה'],
+  cond:'הרבה צמחונים קטנים ובריאים בירוק-ליים, עם עלים משוננים. כנראה "אם אלפים", שמייצר תינוקות בשולי העלים. הם צפופים כי נשתלו יחד, והצבע הבהיר מראה שהם מקבלים אור טוב.',
+  pot:'עציץ פלסטיק דמוי קש עם צלחת, קל ומתאים. צריך לרוקן את הצלחת אחרי השקיה. האדמה נראית אדמת עציצים רגילה, ועדיף לערבב בה פרלייט או חול. כשהם יגדלו, כדאי להפריד אותם לעציצים קטנים.',
+  todo:['לרוקן את הצלחת אחרי השקיה','להשקות רק כשהאדמה יבשה','להפריד כשיגיעו ל-5 ס״מ'],
+  tip:'"אם אלפים" רעיל לחיות מחמד. הוא גם מתפשט לבד, אז כדאי לאסוף תינוקות שנופלים לעציצים אחרים.'},
+ 'my-pothos2':{sp:'פוטוס מגוון',lat:"Epipremnum aureum 'Marble Queen'",every:7,light:'בהיר עקיף',temp:'17–30°',hum:'40–60%',health:['ok','שתול טרי'],
+  cond:'צמח צעיר שנשתל לאחרונה, עם עלים מגוונים בצהוב-לבן, קשור למקלות. עלה תחתון אחד כהה עם קצה חום, כנראה מהמעבר. ענף אחד ארוך נמתח הצידה לכיוון האור.',
+  pot:'עציץ קרמיקה לבן עם צלחת, מעולה. האדמה טרייה ואוורירית. את מקלות הבמבוק הדקים אפשר להחליף בעמוד קוקוס, כמו של המונסטרה אדנסוני, ואז העלים יגדלו גדולים יותר.',
+  todo:['להשקות כשה-2–3 ס״מ העליונים יבשים','לקשור את הענף הארוך','להסיר את העלה עם הקצה החום'],
+  tip:'זנים מגוונים צריכים יותר אור מפוטוס ירוק. בפינה חשוכה העלים מאבדים את הלבן.'},
  'my-basil':{sp:'בזיליקום',lat:'Ocimum basilicum',every:3,light:'שמש ישירה, 6+ שעות',temp:'18–30°',hum:'40–60%',health:['warn','צריך שמש'],
   cond:'צמח צעיר ומוארך עם מעט עלים. הגבעול עקום ונמתח לכיוון האור, סימן שחסרה לו שמש. בעלים העליונים יש חורים קטנים וכתמים חומים בשוליים, כנראה נזק של מזיקים (כנימות, זחלים או חלזונות). בחורף, בתוך הבית, בזיליקום נוטה להיחלש.',
   pot:'קופסת שימורים צבועה: מחזור יפה, ובגודל מתאים לעכשיו. חשוב לוודא שיש חורי ניקוז בתחתית, אחרת המים עומדים והשורשים נרקבים. פח מתחמם ויכול להחליד, אז באביב כדאי לעבור לעציץ חרס של כ-15 ס״מ.',
@@ -463,7 +503,12 @@ const START=[
  {id:7,name:'קלנכואה פדצ׳נקו',type:'my-kalanchoe',room:'שולחן הסלון'},
  {id:8,name:'קרוטון',type:'my-croton',room:'ליד הטלוויזיה'},
  {id:9,name:'סנסווריה לורנטי',type:'my-sansevieria',room:'כניסה'},
- {id:10,name:'דיפנבכיה',type:'my-dieffenbachia',room:'מבואה'}
+ {id:10,name:'דיפנבכיה',type:'my-dieffenbachia',room:'מבואה'},
+ {id:11,name:'פוטוס מגוון בבקבוק',type:'my-pothos-water',room:'מרפסת סגורה'},
+ {id:12,name:'קולאוס ארגמן',type:'my-coleus2',room:'מרפסת סגורה'},
+ {id:13,name:'בזיליקום באדנית',type:'my-basil2',room:'מרפסת סגורה'},
+ {id:14,name:'תינוקות קלנכואה',type:'my-kalanchoe2',room:'מרפסת סגורה'},
+ {id:15,name:'פוטוס מגוון',type:'my-pothos2',room:'מרפסת סגורה'}
 ];const KEY='yarok-plants-v1';
 const DAY=864e5;
 const dayStart=(t=Date.now())=>{const d=new Date(t);d.setHours(0,0,0,0);return d.getTime()};
@@ -471,9 +516,12 @@ const todayKey=()=>new Date(dayStart()).toISOString().slice(0,10);
 // all ten were watered on the morning of 25 Nov 2026
 const SEED=new Date(2026,10,25).getTime();
 const PHOTO_EVERY=14;
-const fresh=()=>({tab:'today',seg:'done',plants:START.map(p=>({...p,at:SEED,photoAt:SEED})),done:Object.fromEntries(START.map(p=>[p.id,'ok'])),doneDay:'2026-11-25',todo:{},next:11,remind:{time:'08:30',combine:true,weather:true,vacation:false,shared:true,push:false,photo:true}});
+const fresh=()=>({tab:'today',seg:'done',plants:START.map(p=>({...p,at:SEED,photoAt:SEED})),done:Object.fromEntries(START.map(p=>[p.id,'ok'])),doneDay:'2026-11-25',todo:{},next:16,added2:true,remind:{time:'08:30',combine:true,weather:true,vacation:false,shared:true,push:false,photo:true}});
 let S;try{S=JSON.parse(localStorage.getItem(KEY))||fresh()}catch(e){S=fresh()}
 S.todo=S.todo||{};S.shot=S.shot||{};
+// plants added on 26 Nov reach people who already have saved data
+if(!S.added2){START.filter(p=>p.id>10).forEach(p=>{if(!S.plants.some(x=>x.type===p.type))S.plants.push({...p,id:S.next++,at:SEED,photoAt:Date.now()})});S.added2=true}
+S.trip=S.trip||null;
 if(S.remind.photo===undefined)S.remind.photo=true;
 S.plants.forEach(p=>{if(!p.photoAt)p.photoAt=p.at});
 const sync=()=>{S.plants.forEach(p=>{p.last=Math.max(0,Math.round((dayStart()-dayStart(p.at))/DAY))});if(S.doneDay!==todayKey()){S.done={};S.shot={};S.doneDay=todayKey();S.seg='today'}};
@@ -482,7 +530,7 @@ const photoDue=p=>S.remind.photo&&photoAge(p)>=PHOTO_EVERY;
 const setLast=(p,n)=>{p.at=dayStart()-n*DAY;p.last=n};
 sync();
 let sel=null,A={step:'photo'};
-const pushPayload=()=>({time:S.remind.time,combine:S.remind.combine,enabled:!!S.remind.push,plants:S.plants.map(p=>({name:p.name,every:I(p).every,act:act(p),at:p.at,photoAt:p.photoAt,photoEvery:S.remind.photo?PHOTO_EVERY:0}))});
+const pushPayload=()=>({time:S.remind.time,combine:S.remind.combine,enabled:!!S.remind.push,plants:S.plants.map(p=>({name:p.name,every:I(p).every,act:act(p),at:p.at,photoAt:p.photoAt,photoEvery:S.remind.photo?PHOTO_EVERY:0,...(S.trip?.on?{trip:{from:S.trip.from,to:S.trip.to}}:{})}))});
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}if(S.remind.push)window.yarokPush?.sync(pushPayload())};
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const $=id=>document.getElementById(id);
@@ -569,6 +617,7 @@ function today(){
  const healthy=S.plants.filter(p=>state(p)[0]==='ok').length,need=S.plants.length-healthy;
  const pct=S.plants.length?Math.round(healthy*100/S.plants.length):0;
  const nd=[...S.plants].sort((a,b)=>left(a)-left(b))[0];
+ const shotsDue=S.plants.filter(p=>photoDue(p)&&!S.shot[p.id]);
  const nextShot=S.plants.length?Math.min(...S.plants.map(p=>Math.max(0,PHOTO_EVERY-photoAge(p)))):0;
  const tipP=S.plants[Math.floor(dayStart()/DAY)%Math.max(1,S.plants.length)];
  const n=open?open:nd?Math.max(0,left(nd)):0;
@@ -584,7 +633,8 @@ function today(){
    <button class="stat lightg"${nd?` data-open="${nd.id}"`:''}><b>${nd?(left(nd)<=0?'היום':left(nd)):'—'}${nd&&left(nd)>0?'<small>ימים</small>':''}</b><span>השקיה הבאה${nd?' · '+esc(nd.name):''}</span></button>
   </div>
   ${open?`<div class="banner"><span class="ico">${svg('drop',2)}</span><div><b>${open===1?'צמח אחד מחכה':open+' צמחים מחכים'} למים</b><small>${esc(openL.map(p=>p.name).join(', '))}</small></div><button class="lp" data-nall>השקיתי הכל</button></div>`
-  :''}
+  :tripNow()?`<div class="banner"><span class="ico">✈️</span><div><b>${tripNow()==='before'?'מחר יוצאים':'בחופשה עד '+fmtD(S.trip.to)}</b><small>${tripNow()==='before'?'להשקות היום את כולם':S.trip.helper?esc(S.trip.helper)+' משקה לפי התוכנית':'התוכנית בתזכורות'}</small></div><button class="lp" data-tab="remind">לתוכנית</button></div>`
+  :shotsDue.length?`<div class="banner"><span class="ico">${svg('cam',2)}</span><div><b>יום צילום</b><small>${esc(shotsDue.map(p=>p.name).join(', '))}</small></div><button class="lp" data-tab="photos">לצלם</button></div>`:''}
  </section>
  ${queue()}
  ${tipP?`<div class="quote"><small>הטיפ של היום · ${esc(tipP.name)}</small><p>${I(tipP).tip}</p></div>`:''}
@@ -688,6 +738,49 @@ function add(){
    <div class="cta"><button class="btn" data-addsave>הוסף לצמחים שלי</button><button class="btn alt" data-back="type" aria-label="חזרה">${svg('back',2)}</button></div>
   </div>`;
 }
+/* Trip mode: water everything right before leaving, then a dated plan for whoever stays home */
+const iso=t=>{const d=new Date(t);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
+const dOf=x=>{const [y,m,d]=x.split('-').map(Number);return new Date(y,m-1,d).getTime()};
+const fmtD=x=>new Date(dOf(x)).toLocaleDateString('he-IL',{weekday:'short',day:'numeric',month:'numeric'});
+function tripNow(){
+ const t=S.trip;if(!t||!t.on)return '';
+ const today=dayStart(),from=dOf(t.from),to=dOf(t.to);
+ if(today===from-DAY||today===from&&new Date().getHours()<12)return 'before';
+ if(today>=from&&today<to)return 'away';
+ return '';
+}
+function tripPlan(){
+ const t=S.trip,from=dOf(t.from),to=dOf(t.to),days=Math.max(1,Math.round((to-from)/DAY));
+ const visits={},fine=[],help=[];
+ S.plants.forEach(p=>{
+  const ev=I(p).every;
+  if(ev>=days){fine.push(p);return}
+  help.push(p);
+  for(let d=from+ev*DAY;d<to;d+=ev*DAY){const k=iso(d);(visits[k]=visits[k]||[]).push(p)}
+ });
+ return {days,fine,help,visits:Object.entries(visits).sort()};
+}
+function tripText(){
+ const t=S.trip,P=tripPlan();
+ return `היי${t.helper?' '+t.helper:''} 🌿\nאני בחופשה מ-${fmtD(t.from)} עד ${fmtD(t.to)}. תודה שאת/ה עוזר/ת עם הצמחים!\n\n`+
+  (P.visits.length?P.visits.map(([d,L])=>`${fmtD(d)}:\n`+L.map(p=>`• ${p.name} (${p.room}) – ${act(p)==='השקיה'?'להשקות':'להחליף מים'}`).join('\n')).join('\n\n'):'אין צורך להשקות, הכל יסתדר לבד 🙂')+
+  (P.fine.length?`\n\nלא צריך לגעת: ${P.fine.map(p=>p.name).join(', ')}`:'')+`\n\n— נשלח מ-Yarok`;
+}
+function tripCard(){
+ const t=S.trip;
+ if(!t||!t.on)return `<div class="set glass"><div><b>✈️ מצב חופשה</b><small>יוצא מהבית לכמה ימים? נבנה תוכנית השקיה, תזכורת להשקות לפני, ורשימה למי שנשאר</small></div><button class="lp" data-trip="on">תכנון</button></div>`;
+ const P=tripPlan();
+ return `<div class="trip glass">
+  <div class="row"><h3>✈️ מצב חופשה</h3><button class="mini-g" data-trip="off">ביטול</button></div>
+  <div class="tripf"><label class="field" for="t-from">יוצא<input type="date" id="t-from" value="${t.from}"></label><label class="field" for="t-to">חוזר<input type="date" id="t-to" value="${t.to}"></label></div>
+  <label class="field" for="t-helper">מי משקה בזמן שאני לא בבית?<input id="t-helper" value="${esc(t.helper||'')}" placeholder="למשל: אמא, השותף, השכנה"></label>
+  <div class="tsum"><div><b>${P.days}</b><small>ימים בחוץ</small></div><div><b>${P.fine.length}</b><small>יסתדרו לבד</small></div><div><b>${P.visits.length}</b><small>ביקורי השקיה</small></div></div>
+  <div class="tstep"><span>1</span><div><b>${fmtD(iso(dOf(t.from)-DAY))}, יום לפני</b><small>להשקות היטב את כולם ולמלא את הבקבוקים. התזכורת תגיע לבד.</small></div></div>
+  ${P.visits.length?`<div class="tstep"><span>2</span><div><b>${t.helper?esc(t.helper)+' משקה':'מישהו צריך להשקות'}</b>${P.visits.map(([d,L])=>`<small><i>${fmtD(d)}</i> ${esc(L.map(p=>p.name).join(', '))}</small>`).join('')}</div></div>`:`<div class="tstep"><span>2</span><div><b>לא צריך עזרה</b><small>הנסיעה קצרה מספיק, כל הצמחים יחזיקו.</small></div></div>`}
+  <div class="tstep"><span>${P.visits.length?3:3}</span><div><b>טיפים</b><small>לקבץ את הצמחים הצמאים יחד הרחק מהשמש הישירה של המרפסת, ומגש עם חלוקים ומים מתחתם. לבזיליקום אפשר לנעוץ בקבוק מים הפוך באדמה.</small></div></div>
+  ${P.visits.length?`<div class="cta"><button class="btn" data-trip="share">שלח את התוכנית${t.helper?' ל'+esc(t.helper):''}</button><a class="btn alt" href="https://wa.me/?text=${encodeURIComponent(tripText())}" target="_blank" rel="noopener" aria-label="שלח בוואטסאפ">💬</a></div>`:''}
+ </div>`;
+}
 function reminders(){
  const R=S.remind,sw=(k,t,s)=>`<label class="set glass" for="r-${k}"><div><b>${t}</b><small>${s}</small></div><input type="checkbox" class="sw" id="r-${k}" data-r="${k}" ${R[k]?'checked':''}></label>`;
  return `<div class="top"><h2><b>תזכורות</b></h2></div>
@@ -696,9 +789,8 @@ function reminders(){
  ${sw('photo','תזכורת לצלם','כל שבועיים, כדי לראות את הצמחים גדלים')}
  ${sw('combine','התראה מרוכזת','במקום התראה נפרדת לכל צמח')}
  ${sw('weather','התראות מזג אוויר','גל חום, קרה או רוח חזקה במרפסת')}
- ${sw('vacation','מצב חופשה','השקיה לפני הנסיעה ורשימה למי ששומר על הצמחים')}
  ${sw('shared','משותף לבית','כשמישהו משקה, התזכורת נעלמת לכולם')}
- ${R.vacation?`<div class="tip glass"><div><h3>לפני הנסיעה ב-3 בדצמבר</h3><p>להשקות היטב את מוני, לילי ושרי. להעביר את שרי לאמבטיה עם מגש מים. סנסי, זי וקוצי יסתדרו לבד.</p></div></div>`:''}
+ ${tripCard()}
  <button class="btn" data-demo>הצג תזכורת לדוגמה</button>
  <button class="small" data-reset>אפס את נתוני הדוגמה</button>`;
 }
@@ -803,6 +895,7 @@ function render(){
  if(sel)$('screen').insertAdjacentHTML('beforeend',detail());
 }
 function notify(){
+ if(tripNow()==='before'){const n=$('notif');n.innerHTML=`<div class="nt"><img src="icons/icon-192.png" alt=""><span>Yarok · עכשיו</span></div><h3>מחר יוצאים ✈️</h3><p>להשקות היום היטב את כל ${S.plants.length} הצמחים ולמלא את הבקבוקים.</p><div class="cta"><button class="btn" data-nall>השקיתי הכל</button></div>`;n.classList.add('show');clearTimeout(notify.t);notify.t=setTimeout(()=>n.classList.remove('show'),9000);return}
  const open=S.plants.filter(p=>due(p)&&!S.done[p.id]),n=$('notif');
  const first=open[0];
  n.innerHTML=`<div class="nt"><img src="icons/icon-192.png" alt=""><span>ירוק בבית · עכשיו</span></div>
@@ -856,13 +949,16 @@ document.addEventListener('click',e=>{
  else if(d.back){A.step=d.back;render()}
  else if(d.kind){A.kind=d.kind;A.step='details';render()}
  else if('addsave' in d)addPlant();
+ else if(d.trip==='on'){const f=dayStart()+7*DAY;S.trip={on:true,from:iso(f),to:iso(f+7*DAY),helper:S.trip?.helper||''};save();render()}
+ else if(d.trip==='off'){S.trip={...S.trip,on:false};save();render();toast('מצב חופשה בוטל')}
+ else if(d.trip==='share'){const txt=tripText();if(navigator.share)navigator.share({text:txt}).catch(()=>{});else navigator.clipboard?.writeText(txt).then(()=>toast('התוכנית הועתקה')).catch(()=>toast('לא הצלחתי להעתיק'))}
  else if('demo' in d)notify();
  else if('reset' in d)reset();
- else if('nall' in d){openDue().forEach(p=>{setLast(p,0);S.done[p.id]='ok'});closeN();save();render();toast(S.remind.shared?'סומן לכל בני הבית':'סומן כהושקה')}
+ else if('nall' in d){(tripNow()==='before'?S.plants:openDue()).forEach(p=>{setLast(p,0);S.done[p.id]='ok'});closeN();save();render();toast(S.remind.shared?'סומן לכל בני הבית':'סומן כהושקה')}
  else if('nlater' in d){openDue().forEach(p=>{setLast(p,I(p).every-1);S.done[p.id]='later'});closeN();save();render();toast('נזכיר מחר ב-'+S.remind.time)}
 });
 document.addEventListener('input',e=>{if(e.target.id==='q'){A.q=e.target.value;$('kinds').innerHTML=catList(A.q)}});
-document.addEventListener('change',async e=>{const t=e.target;if(t.dataset.r==='push'&&t.checked&&!(await askPush())){t.checked=false;return}if(t.dataset.r){S.remind[t.dataset.r]=t.checked;if(t.dataset.r==='push'&&!t.checked)window.yarokPush?.sync({...pushPayload(),enabled:false});save();render()}else if(t.id==='r-time'){S.remind.time=t.value;save()}});
+document.addEventListener('change',async e=>{const t=e.target;if(t.id==='t-from'||t.id==='t-to'||t.id==='t-helper'){S.trip[t.id.slice(2)]=t.value;if(dOf(S.trip.to)<=dOf(S.trip.from))S.trip.to=iso(dOf(S.trip.from)+DAY);save();render();return}if(t.dataset.r==='push'&&t.checked&&!(await askPush())){t.checked=false;return}if(t.dataset.r){S.remind[t.dataset.r]=t.checked;if(t.dataset.r==='push'&&!t.checked)window.yarokPush?.sync({...pushPayload(),enabled:false});save();render()}else if(t.id==='r-time'){S.remind.time=t.value;save()}});
 $('t-notif').onclick=()=>{sel=null;S.tab='today';render();notify()};
 $('t-add').onclick=()=>{sel=null;S.tab='add';A={step:'photo'};render()};
 $('t-plant').onclick=()=>{sel=S.plants[0]?.id??null;render()};
