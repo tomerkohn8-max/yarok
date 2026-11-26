@@ -1,5 +1,5 @@
 // Caches the app shell so it opens offline; bump VERSION when files change.
-const VERSION = 'yarok-v17';
+const VERSION = 'yarok-v18';
 const ASSETS = [
   './', 'index.html', 'manifest.webmanifest', 'push.js', 'firebase-config.js',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png', 'icons/badge-96.png',
@@ -25,6 +25,13 @@ self.addEventListener('activate', e => {
 
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
+  if (e.request.mode === 'navigate') {
+    // the page is always fetched fresh so updates show at once; cache is the offline fallback
+    e.respondWith(fetch(e.request).then(res => {
+      const copy = res.clone(); caches.open(VERSION).then(c => c.put('index.html', copy)); return res;
+    }).catch(() => caches.match('index.html')));
+    return;
+  }
   e.respondWith(
     caches.match(e.request).then(hit => hit || fetch(e.request).then(res => {
       if (res.ok && new URL(e.request.url).origin === location.origin) {

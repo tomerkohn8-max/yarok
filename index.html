@@ -161,6 +161,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 .tstep i{font-style:normal;color:var(--ink);font-weight:600;margin-inline-end:4px}
 a.btn.alt{text-decoration:none;font-size:20px}
 input[type=date]{font:16px "Heebo",sans-serif}
+.hero2 .quote,.hero2 .capsule{margin-inline:-4px}
 .quote{padding:22px 20px 20px;border-radius:30px;background:linear-gradient(160deg,#28503a,#1b3a28);box-shadow:inset 0 0 0 1px rgba(212,243,107,.25),inset 0 1px 0 rgba(255,255,255,.2),0 18px 34px -18px rgba(5,25,10,.8);position:relative;overflow:hidden}
 .quote::before{content:"”";position:absolute;top:-34px;left:14px;font:800 120px "Heebo",sans-serif;color:rgba(255,255,255,.08)}
 .quote small{color:var(--lime);font-weight:600;font-size:13px}
@@ -629,6 +630,9 @@ function today(){
  const say=open?`${open===1?'צמח אחד צריך':`<b>${open} צמחים</b> צריכים`} טיפול היום.`:nd?`עד ההשקיה הבאה של <b>${esc(nd.name)}</b>.`:'';
  return `<section class="hero2">
   <div class="hbar"><div class="brand"><span>Yarok<i>.</i></span><span class="halo"><img src="icons/icon-192.png" alt=""></span></div><div class="chips"><span>${greet()}</span><span>${new Date().toLocaleDateString('he-IL',{weekday:'short',day:'numeric',month:'short'})}</span></div></div>
+  ${tipP?`<div class="quote"><small>הטיפ של היום · ${esc(tipP.name)}</small><p>${I(tipP).tip}</p></div>`:''}
+  <div class="capsule"><div><small>מרגישים מצוין</small><div class="pct">${pct}%</div><button class="lp" data-tab="plants">לכל הצמחים</button></div>
+  <div class="tube" aria-label="${pct}% מהצמחים בריאים"><div class="liquid" style="height:${Math.max(6,pct)}%"><svg viewBox="0 0 200 14" preserveAspectRatio="none" aria-hidden="true"><path d="M0 7Q25 0 50 7T100 7T150 7T200 7V14H0z" fill="currentColor"/></svg></div><i class="bub" style="left:30px"></i><i class="bub" style="left:58px;animation-delay:-1.6s"></i><i class="bub" style="left:44px;animation-delay:-3s"></i></div></div>
   <div class="kicker">— ${open?'מה מחכה לך היום':'הכל מטופל. ספירה לאחור'}</div>
   <div class="bignum"><b>${n}</b><div class="tag"><span>${tag}</span>${svg('down',2.4)}</div></div>
   <p class="lead">${say} <b>${S.plants.length}</b> צמחים בבית, <b>${healthy}</b> מרגישים מצוין${need?` ו-<b>${need}</b> צריכים תשומת לב`:''}.</p>
@@ -640,9 +644,6 @@ function today(){
   :tripNow()?`<div class="banner"><span class="ico">✈️</span><div><b>${tripNow()==='before'?'מחר יוצאים':'בחופשה עד '+fmtD(S.trip.to)}</b><small>${tripNow()==='before'?'להשקות היום את כולם':S.trip.helper?esc(S.trip.helper)+' משקה לפי התוכנית':'התוכנית בתזכורות'}</small></div><button class="lp" data-tab="remind">לתוכנית</button></div>`
   :shotsDue.length?`<div class="banner"><span class="ico">${svg('cam',2)}</span><div><b>יום צילום</b><small>${esc(shotsDue.map(p=>p.name).join(', '))}</small></div><button class="lp" data-tab="photos">לצלם</button></div>`:''}
  </section>
- ${tipP?`<div class="quote"><small>הטיפ של היום · ${esc(tipP.name)}</small><p>${I(tipP).tip}</p></div>`:''}
- <div class="capsule"><div><small>מרגישים מצוין</small><div class="pct">${pct}%</div><button class="lp" data-tab="plants">לכל הצמחים</button></div>
-  <div class="tube" aria-label="${pct}% מהצמחים בריאים"><div class="liquid" style="height:${Math.max(6,pct)}%"><svg viewBox="0 0 200 14" preserveAspectRatio="none" aria-hidden="true"><path d="M0 7Q25 0 50 7T100 7T150 7T200 7V14H0z" fill="currentColor"/></svg></div><i class="bub" style="left:30px"></i><i class="bub" style="left:58px;animation-delay:-1.6s"></i><i class="bub" style="left:44px;animation-delay:-3s"></i></div></div>
  ${attention()}
  ${queue()}
  ${photoBlock()}`;
