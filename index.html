@@ -624,7 +624,7 @@ function today(){
  const tag=open?(open===1?'צמח':'צמחים'):'ימים';
  const say=open?`${open===1?'צמח אחד צריך':`<b>${open} צמחים</b> צריכים`} טיפול היום.`:nd?`עד ההשקיה הבאה של <b>${esc(nd.name)}</b>.`:'';
  return `<section class="hero2">
-  <div class="hbar"><div class="brand"><span class="halo"><img src="icons/icon-192.png" alt=""></span><span>Yarok<i>.</i></span></div><div class="chips"><span>${greet()}</span><span>${new Date().toLocaleDateString('he-IL',{weekday:'short',day:'numeric',month:'short'})}</span></div></div>
+  <div class="hbar"><div class="brand"><span>Yarok<i>.</i></span><span class="halo"><img src="icons/icon-192.png" alt=""></span></div><div class="chips"><span>${greet()}</span><span>${new Date().toLocaleDateString('he-IL',{weekday:'short',day:'numeric',month:'short'})}</span></div></div>
   <div class="kicker">— ${open?'מה מחכה לך היום':'הכל מטופל. ספירה לאחור'}</div>
   <div class="bignum"><b>${n}</b><div class="tag"><span>${tag}</span>${svg('down',2.4)}</div></div>
   <p class="lead">${say} <b>${S.plants.length}</b> צמחים בבית, <b>${healthy}</b> מרגישים מצוין${need?` ו-<b>${need}</b> צריכים תשומת לב`:''}.</p>
