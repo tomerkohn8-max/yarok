@@ -162,6 +162,28 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 a.btn.alt{text-decoration:none;font-size:20px}
 input[type=date]{font:16px "Heebo",sans-serif}
 .hero2 .quote,.hero2 .capsule{margin-inline:-4px}
+.view svg.pot{width:110px;height:176px;overflow:visible;filter:drop-shadow(0 16px 20px rgba(0,0,0,.45))}
+.pot .wave path{animation:wave2 3.2s linear infinite}
+@keyframes wave2{to{transform:translateX(100px)}}
+.pot .fill,.pot .wave{animation:potfill 1.4s cubic-bezier(.25,.8,.3,1)}
+@keyframes potfill{from{transform:translateY(150px)}}
+.pot .bub{animation:bub2 3.5s ease-in infinite}.pot .b2{animation-delay:-1.7s}
+@keyframes bub2{0%{transform:translateY(0);opacity:0}20%{opacity:.9}100%{transform:translateY(-70px);opacity:0}}
+.pot .sprout{transform-origin:50px 40px;animation:sway 5s ease-in-out infinite}
+@keyframes sway{50%{transform:rotate(-5deg)}}
+.capsule{grid-template-columns:minmax(0,1fr) 110px}
+.prow{display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap}
+.due{display:inline-flex;align-items:center;gap:4px;font:600 12px "Heebo",sans-serif;padding:4px 9px;border-radius:999px;background:rgba(212,243,107,.16);color:var(--lime);white-space:nowrap}
+.due svg{width:12px!important;height:12px!important}
+.due.warn{background:rgba(255,216,107,.18);color:var(--sun)}
+.due.bad{background:rgba(255,171,149,.2);color:var(--red);animation:beat 1.6s ease-in-out infinite}
+.tippop{position:absolute;right:12px;left:56px;bottom:104px;z-index:7;display:grid;grid-template-columns:56px minmax(0,1fr);gap:12px;align-items:center;padding:14px 16px 14px 14px;border-radius:26px;background:linear-gradient(160deg,rgba(40,80,52,.92),rgba(25,55,34,.92));-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);box-shadow:var(--rim),0 20px 40px -14px rgba(0,0,0,.6);transform:translateX(120%);transition:transform .6s var(--spring)}
+.tippop.show{transform:none}
+.tippop img{width:56px;height:56px;object-fit:contain}
+.tippop small{color:var(--lime);font-size:12px;font-weight:600}
+.tippop p{margin:4px 0 0;font-size:15px;font-weight:600;line-height:1.4}
+.tippop .x{position:absolute;top:-10px;left:-10px;width:30px;height:30px;border-radius:50%;border:0;cursor:pointer;color:var(--ink);font-size:13px;background:linear-gradient(180deg,rgba(255,255,255,.35),rgba(255,255,255,.15));-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.5),0 4px 10px rgba(0,0,0,.35)}
+@media(max-width:600px){.tippop{bottom:calc(env(safe-area-inset-bottom,0px) + 100px)}}
 .quote{padding:22px 20px 20px;border-radius:30px;background:linear-gradient(160deg,#28503a,#1b3a28);box-shadow:inset 0 0 0 1px rgba(212,243,107,.25),inset 0 1px 0 rgba(255,255,255,.2),0 18px 34px -18px rgba(5,25,10,.8);position:relative;overflow:hidden}
 .quote::before{content:"”";position:absolute;top:-34px;left:14px;font:800 120px "Heebo",sans-serif;color:rgba(255,255,255,.08)}
 .quote small{color:var(--lime);font-weight:600;font-size:13px}
@@ -630,9 +652,6 @@ function today(){
  const say=open?`${open===1?'צמח אחד צריך':`<b>${open} צמחים</b> צריכים`} טיפול היום.`:nd?`עד ההשקיה הבאה של <b>${esc(nd.name)}</b>.`:'';
  return `<section class="hero2">
   <div class="hbar"><div class="brand"><span>Yarok<i>.</i></span><span class="halo"><img src="icons/icon-192.png" alt=""></span></div><div class="chips"><span>${greet()}</span><span>${new Date().toLocaleDateString('he-IL',{weekday:'short',day:'numeric',month:'short'})}</span></div></div>
-  ${tipP?`<div class="quote"><small>הטיפ של היום · ${esc(tipP.name)}</small><p>${I(tipP).tip}</p></div>`:''}
-  <div class="capsule"><div><small>מרגישים מצוין</small><div class="pct">${pct}%</div><button class="lp" data-tab="plants">לכל הצמחים</button></div>
-  <div class="tube" aria-label="${pct}% מהצמחים בריאים"><div class="liquid" style="height:${Math.max(6,pct)}%"><svg viewBox="0 0 200 14" preserveAspectRatio="none" aria-hidden="true"><path d="M0 7Q25 0 50 7T100 7T150 7T200 7V14H0z" fill="currentColor"/></svg></div><i class="bub" style="left:30px"></i><i class="bub" style="left:58px;animation-delay:-1.6s"></i><i class="bub" style="left:44px;animation-delay:-3s"></i></div></div>
   <div class="kicker">— ${open?'מה מחכה לך היום':'הכל מטופל. ספירה לאחור'}</div>
   <div class="bignum"><b>${n}</b><div class="tag"><span>${tag}</span>${svg('down',2.4)}</div></div>
   <p class="lead">${say} <b>${S.plants.length}</b> צמחים בבית, <b>${healthy}</b> מרגישים מצוין${need?` ו-<b>${need}</b> צריכים תשומת לב`:''}.</p>
@@ -644,9 +663,27 @@ function today(){
   :tripNow()?`<div class="banner"><span class="ico">✈️</span><div><b>${tripNow()==='before'?'מחר יוצאים':'בחופשה עד '+fmtD(S.trip.to)}</b><small>${tripNow()==='before'?'להשקות היום את כולם':S.trip.helper?esc(S.trip.helper)+' משקה לפי התוכנית':'התוכנית בתזכורות'}</small></div><button class="lp" data-tab="remind">לתוכנית</button></div>`
   :shotsDue.length?`<div class="banner"><span class="ico">${svg('cam',2)}</span><div><b>יום צילום</b><small>${esc(shotsDue.map(p=>p.name).join(', '))}</small></div><button class="lp" data-tab="photos">לצלם</button></div>`:''}
  </section>
+ ${potCard(pct,healthy)}
  ${attention()}
  ${queue()}
  ${photoBlock()}`;
+}
+function dueLab(p){const d=left(p);return d<0?`באיחור ${-d} ${-d===1?'יום':'ימים'}`:d===0?'היום':d===1?'מחר':`בעוד ${d} ימים`}
+function dueCls(p){const d=left(p);return d<=0?'bad':d<=2?'warn':'ok'}
+function potCard(pct,healthy){
+ const top=18,bot=128,y=bot-(bot-top)*Math.max(.05,pct/100);
+ return `<div class="capsule"><div><small>מרגישים מצוין</small><div class="pct">${pct}%</div><small>${healthy} מתוך ${S.plants.length} צמחים</small><button class="lp" data-tab="plants" style="margin-top:12px">לכל הצמחים</button></div>
+ <svg class="pot" viewBox="0 0 100 160" aria-label="${pct}% מהצמחים בריאים">
+  <defs><clipPath id="potIn"><path d="M13 40H87L76 150Q75 155 69 155H31Q25 155 24 150Z"/></clipPath>
+  <linearGradient id="liq" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d4f36b"/><stop offset="1" stop-color="#79c34a"/></linearGradient></defs>
+  <g class="sprout"><path d="M50 40C50 26 49 16 52 4" stroke="#a9dc4c" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M51 20C40 8 26 10 22 16C32 24 44 24 51 20Z" fill="#a9dc4c"/><path d="M52 12C60 0 74 0 78 5C70 14 58 15 52 12Z" fill="#d4f36b"/></g>
+  <g clip-path="url(#potIn)"><rect x="0" y="${(y+12).toFixed(1)}" width="100" height="160" fill="url(#liq)" class="fill" style="--y:${(y+12).toFixed(1)}px"/>
+   <g class="wave" style="transform:translateY(${y.toFixed(1)}px)"><path d="M-100 12Q-75 4 -50 12T0 12T50 12T100 12T150 12T200 12V40H-100Z" fill="#d4f36b"/></g>
+   <circle cx="40" cy="140" r="2.5" class="bub" fill="#fff"/><circle cx="60" cy="146" r="2" class="bub b2" fill="#fff"/></g>
+  <path d="M13 40H87L76 150Q75 155 69 155H31Q25 155 24 150Z" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.6)" stroke-width="1.6"/>
+  <rect x="6" y="30" width="88" height="16" rx="7" fill="rgba(255,255,255,.18)" stroke="rgba(255,255,255,.75)" stroke-width="1.6"/>
+  <path d="M22 52L30 140" stroke="rgba(255,255,255,.55)" stroke-width="5" stroke-linecap="round"/>
+ </svg></div>`;
 }
 function queue(){
  const L=[...S.plants].sort((a,b)=>left(a)-left(b)),C=2*Math.PI*20;
@@ -654,7 +691,7 @@ function queue(){
  return `<div class="sec">לפי סדר השקיה<small style="color:var(--mute);font-weight:400">${late?`${late} צריכים עכשיו`:'אין דחופים'}</small></div>
  <div class="queue">${L.map(p=>{
   const d=left(p),ev=I(p).every,frac=Math.max(0,Math.min(1,d/ev)),cls=d<=0?'bad':d<=2?'warn':'ok',done=S.done[p.id]==='ok';
-  const lab=d<0?`באיחור ${-d} ${-d===1?'יום':'ימים'}`:d===0?'היום':d===1?'מחר':`בעוד ${d} ימים`;
+  const lab=dueLab(p);
   return `<div class="qrow glass ${cls}">
    <button class="qmain" data-open="${p.id}"><img src="${pic(p)}"${phc(p)} alt=""><span><b>${esc(p.name)}</b><small>${act(p)} · ${esc(p.room)}${done?' · '+doneWord(p)+' היום':''}</small></span></button>
    <div class="cd" aria-label="${act(p)} ${lab}"><div class="ringc"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="20" class="tr"/><circle cx="24" cy="24" r="20" class="pr" stroke-dasharray="${(C*frac).toFixed(1)} ${C.toFixed(1)}"/></svg><b>${d<=0?(d<0?'+'+(-d):'0'):d}</b></div><small>${lab}</small></div>
@@ -671,7 +708,7 @@ function plants(){
  return `<div class="top"><h2><b>הצמחים שלי</b></h2><small>${S.plants.length} צמחים</small></div>
  <div class="grid">${S.plants.map(p=>{const [c,t]=state(p);return `<button class="pcard glass" data-open="${p.id}"><img src="${pic(p)}"${phc(p)} alt=""><h3>${esc(p.name)}</h3><small>${p.name===I(p).sp?'':esc(I(p).sp)+' · '}${esc(p.room)}</small>
   <div class="meter" aria-label="רמת מים ${Math.round(lvl(p)*100)}%"><i style="width:${Math.round(lvl(p)*100)}%"></i></div>
-  <span class="chip ${c}" style="padding:0;background:none"><span class="dot"></span>${t}</span></button>`}).join('')}</div>`;
+  <div class="prow"><span class="chip ${c}" style="padding:0;background:none"><span class="dot"></span>${t}</span><span class="due ${dueCls(p)}">${svg('drop',2)}${dueLab(p)}</span></div></button>`}).join('')}</div>`;
 }
 function journal(p){
  const a=PH[p.id]||[],next=Math.max(0,PHOTO_EVERY-photoAge(p));
@@ -899,6 +936,12 @@ function render(){
  const old=$('screen').querySelector('.detail');if(old)old.remove();
  if(sel)$('screen').insertAdjacentHTML('beforeend',detail());
 }
+function showTip(){
+ if(S.tab!=='today'||S.tipSeen===todayKey()||!S.plants.length||$('tipPop'))return;
+ const p=S.plants[Math.floor(dayStart()/DAY)%S.plants.length];
+ $('screen').insertAdjacentHTML('beforeend',`<aside class="tippop" id="tipPop" role="dialog" aria-label="הטיפ של היום"><button class="x" data-tipx aria-label="סגור">✕</button><img src="${pic(p)}"${phc(p)} alt=""><div><small>הטיפ של היום · ${esc(p.name)}</small><p>${I(p).tip}</p></div></aside>`);
+ requestAnimationFrame(()=>$('tipPop').classList.add('show'));
+}
 function notify(){
  if(tripNow()==='before'){const n=$('notif');n.innerHTML=`<div class="nt"><img src="icons/icon-192.png" alt=""><span>Yarok · עכשיו</span></div><h3>מחר יוצאים ✈️</h3><p>להשקות היום היטב את כל ${S.plants.length} הצמחים ולמלא את הבקבוקים.</p><div class="cta"><button class="btn" data-nall>השקיתי הכל</button></div>`;n.classList.add('show');clearTimeout(notify.t);notify.t=setTimeout(()=>n.classList.remove('show'),9000);return}
  const open=S.plants.filter(p=>due(p)&&!S.done[p.id]),n=$('notif');
@@ -957,6 +1000,7 @@ document.addEventListener('click',e=>{
  else if(d.trip==='on'){const f=dayStart()+7*DAY;S.trip={on:true,from:iso(f),to:iso(f+7*DAY),helper:S.trip?.helper||''};save();render()}
  else if(d.trip==='off'){S.trip={...S.trip,on:false};save();render();toast('מצב חופשה בוטל')}
  else if(d.trip==='share'){const txt=tripText();if(navigator.share)navigator.share({text:txt}).catch(()=>{});else navigator.clipboard?.writeText(txt).then(()=>toast('התוכנית הועתקה')).catch(()=>toast('לא הצלחתי להעתיק'))}
+ else if('tipx' in d){S.tipSeen=todayKey();save();const t=$('tipPop');t.classList.remove('show');setTimeout(()=>t.remove(),450)}
  else if('demo' in d)notify();
  else if('reset' in d)reset();
  else if('nall' in d){(tripNow()==='before'?S.plants:openDue()).forEach(p=>{setLast(p,0);S.done[p.id]='ok'});closeN();save();render();toast(S.remind.shared?'סומן לכל בני הבית':'סומן כהושקה')}
@@ -973,6 +1017,7 @@ render();
 $('cam').addEventListener('change',e=>onShot(e.target.files[0]));
 $('gal').addEventListener('change',e=>onShot(e.target.files[0]));
 loadPhotos();
+setTimeout(showTip,2600);
 setTimeout(()=>{if(openDue().length||S.plants.some(p=>photoDue(p)&&!S.shot[p.id]))notify()},1500);
 if('serviceWorker' in navigator&&window.isSecureContext)navigator.serviceWorker.register('sw.js').catch(()=>{});
 }
