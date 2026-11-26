@@ -378,6 +378,14 @@ input[type=time]{font:600 18px "Heebo",sans-serif;border:0;border-radius:999px;p
 .toast{position:absolute;bottom:100px;left:50%;transform:translate(-50%,16px) scale(.9);font:600 14px "Heebo",sans-serif;padding:10px 18px;border-radius:99px;opacity:0;transition:opacity .3s,transform .5s var(--spring);white-space:nowrap;z-index:8;pointer-events:none;background:linear-gradient(180deg,#e6fb93,#c4e95a);box-shadow:inset 0 1.5px 1px #fff,0 10px 24px -10px rgba(5,25,10,.6);color:var(--deep)}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 .small{font:500 14px "Heebo",sans-serif;background:none;border:0;color:var(--faint);cursor:pointer;padding:10px;text-decoration:underline}
+/* performance: iPhone Safari drops layers when many blurred panes sit over moving backgrounds.
+   Cards in the scrolling view get a plain translucent fill; only floating chrome keeps real blur. */
+.view .glass,.view .stat,.view .banner,.view .capsule,.view .quote,.view .seg{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+.view .glass{background:linear-gradient(160deg,rgba(255,255,255,.2),rgba(255,255,255,.09))}
+.screen::after,.hero2::after{animation:none!important}
+.mini img,.pcard img,.task img,.qmain img{animation:none!important}
+.view,.detail{transform:translateZ(0)}
+.tabs,.notif,.tippop{will-change:transform}
 @media(prefers-reduced-motion:reduce){*{animation:none!important}.notif,.toast{transition:none}}
 @media(max-width:800px){.wrap{grid-template-columns:minmax(0,1fr)}.phone{max-width:400px;margin:0 auto}.side{order:-1}.side h1{font-size:48px}}
 @media(max-width:600px){
@@ -942,6 +950,7 @@ function moveLens(){
   render();bar.dataset.dragged=Date.now();
  };
  bar.addEventListener('pointerup',end);bar.addEventListener('pointercancel',end);
+ addEventListener('pointerup',e=>{if(drag&&!drag.on)drag=null},true);
  addEventListener('resize',()=>{lensAt=null;moveLens();liquidFilters()});
 })();
 function render(){
@@ -963,6 +972,9 @@ function showTip(){
  const p=S.plants[Math.floor(dayStart()/DAY)%S.plants.length];
  $('screen').insertAdjacentHTML('beforeend',`<aside class="tippop" id="tipPop" role="dialog" aria-label="הטיפ של היום"><button class="x" data-tipx aria-label="סגור">✕</button><img src="${pic(p)}"${phc(p)} alt=""><div><small>הטיפ של היום · ${esc(p.name)}</small><p>${I(p).tip}</p></div></aside>`);
  requestAnimationFrame(()=>$('tipPop').classList.add('show'));
+ const close=()=>{const t=$('tipPop');if(!t)return;S.tipSeen=todayKey();save();t.classList.remove('show');setTimeout(()=>t.remove(),450);document.removeEventListener('pointerdown',out,true)};
+ const out=e=>{if(!e.target.closest('#tipPop'))close()};
+ setTimeout(()=>document.addEventListener('pointerdown',out,true),400);setTimeout(close,12000);
 }
 function notify(){
  if(tripNow()==='before'){const n=$('notif');n.innerHTML=`<div class="nt"><img src="icons/icon-192.png" alt=""><span>Yarok · עכשיו</span></div><h3>מחר יוצאים ✈️</h3><p>להשקות היום היטב את כל ${S.plants.length} הצמחים ולמלא את הבקבוקים.</p><div class="cta"><button class="btn" data-nall>השקיתי הכל</button></div>`;n.classList.add('show');clearTimeout(notify.t);notify.t=setTimeout(()=>n.classList.remove('show'),9000);return}
