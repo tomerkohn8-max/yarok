@@ -55,6 +55,7 @@ button.glass:active,.btn:active,.ghost:active,.check:active,.round:active,.pill:
 .status span:last-child{display:flex;gap:6px;align-items:center}
 .status i{display:inline-block;width:22px;height:11px;border:1.5px solid currentColor;border-radius:3px;position:relative}
 .status i::after{content:"";position:absolute;inset:1.5px;right:5px;background:currentColor;border-radius:1px}
+.screen>.sbar{position:absolute;top:0;left:0;right:0;height:env(safe-area-inset-top,0px);z-index:5;pointer-events:none;background:rgba(40,80,48,.55);-webkit-backdrop-filter:blur(16px) saturate(160%);backdrop-filter:blur(16px) saturate(160%)}
 .view{--vt:44px;flex:1;overflow-y:auto;padding:var(--vt) 18px 116px;display:flex;flex-direction:column;gap:16px;scrollbar-width:none}
 .view::-webkit-scrollbar{display:none}
 .view>*,.detail>*{flex-shrink:0}
@@ -360,6 +361,7 @@ body{background:var(--ground)}
   <div class="phone"><div class="screen" id="screen">
     <div class="status"><span>9:41</span><span><svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="6" rx="1"/><rect x="9" y="2.5" width="3" height="8.5" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1"/></svg><i aria-hidden="true"></i></span></div>
     <div class="notif glass" id="notif" role="status" aria-live="polite"></div>
+    <div class="sbar" aria-hidden="true"></div>
     <main class="view" id="view"></main>
     <input type="file" id="cam" accept="image/*" capture="environment" hidden>
     <input type="file" id="gal" accept="image/*" hidden>
@@ -636,11 +638,11 @@ function today(){
   :tripNow()?`<div class="banner"><span class="ico">✈️</span><div><b>${tripNow()==='before'?'מחר יוצאים':'בחופשה עד '+fmtD(S.trip.to)}</b><small>${tripNow()==='before'?'להשקות היום את כולם':S.trip.helper?esc(S.trip.helper)+' משקה לפי התוכנית':'התוכנית בתזכורות'}</small></div><button class="lp" data-tab="remind">לתוכנית</button></div>`
   :shotsDue.length?`<div class="banner"><span class="ico">${svg('cam',2)}</span><div><b>יום צילום</b><small>${esc(shotsDue.map(p=>p.name).join(', '))}</small></div><button class="lp" data-tab="photos">לצלם</button></div>`:''}
  </section>
- ${queue()}
  ${tipP?`<div class="quote"><small>הטיפ של היום · ${esc(tipP.name)}</small><p>${I(tipP).tip}</p></div>`:''}
  <div class="capsule"><div><small>מרגישים מצוין</small><div class="pct">${pct}%</div><button class="lp" data-tab="plants">לכל הצמחים</button></div>
   <div class="tube" aria-label="${pct}% מהצמחים בריאים"><div class="liquid" style="height:${Math.max(6,pct)}%"><svg viewBox="0 0 200 14" preserveAspectRatio="none" aria-hidden="true"><path d="M0 7Q25 0 50 7T100 7T150 7T200 7V14H0z" fill="currentColor"/></svg></div><i class="bub" style="left:30px"></i><i class="bub" style="left:58px;animation-delay:-1.6s"></i><i class="bub" style="left:44px;animation-delay:-3s"></i></div></div>
  ${attention()}
+ ${queue()}
  ${photoBlock()}`;
 }
 function queue(){
