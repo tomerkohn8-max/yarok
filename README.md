@@ -41,6 +41,9 @@ Settings → Pages → Source: `Deploy from a branch` → Branch: `main` / `(roo
 
 שימו לב: GitHub משהה תהליכים מתוזמנים במאגר ציבורי שלא היה בו שום שינוי 60 יום. אם זה קורה, מפעילים אותם מחדש בלשונית Actions.
 
+## הסרת רקע מתמונות
+תמונה חדשה של צמח נחתכת מהרקע בתוך הטלפון, עם [@imgly/background-removal](https://github.com/imgly/background-removal-js) (רישיון AGPL-3.0) שנמצא ב-`vendor/bgremove.js`. בפעם הראשונה המודל (כ-45MB) יורד מהשרת של imgly. אפשר לכבות את זה בתזכורות ← "הסרת רקע אוטומטית".
+
 ## מבנה
 - `index.html`: כל האפליקציה (HTML, CSS ו-JS)
 - `sw.js`: service worker לעבודה בלי אינטרנט, להצגת התראות ולפתיחת האפליקציה מהתראה

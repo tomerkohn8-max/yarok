@@ -278,6 +278,9 @@ img.ph{object-fit:cover!important;border-radius:16px;filter:none!important;box-s
 .jr figure,.ba figure{margin:0;position:relative;flex:none}
 .jr img{width:78px;height:96px;object-fit:cover;border-radius:16px;display:block}
 .jr figcaption,.ba figcaption{font-size:12px;color:var(--mute);text-align:center;margin-top:3px}
+.busy{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:12;display:flex;align-items:center;gap:12px;max-width:80%;padding:16px 20px;border-radius:24px;font:600 15px "Heebo",sans-serif;color:var(--ink);background:linear-gradient(160deg,rgba(40,80,52,.95),rgba(25,55,34,.95));box-shadow:var(--rim),0 20px 40px -14px rgba(0,0,0,.6)}
+.busy i{width:22px;height:22px;flex:none;border-radius:50%;border:3px solid rgba(255,255,255,.25);border-top-color:var(--lime);animation:turn .8s linear infinite!important}
+.jcut{position:absolute;top:4px;right:4px;width:24px;height:24px;border-radius:50%;border:0;background:rgba(0,0,0,.45);font-size:12px;cursor:pointer;padding:0}
 .jdel{position:absolute;top:4px;left:4px;width:22px;height:22px;border-radius:50%;border:0;background:rgba(0,0,0,.45);color:#fff;font-size:11px;cursor:pointer}
 .ba{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .ba img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:20px;display:block}
@@ -592,16 +595,47 @@ const img=t=>{const x=T[t];return x&&x.im===null?'img/logo-mark.png':`img/${x?.i
    PH[plantId] = [{id,ts,url}] oldest first; the newest one becomes the plant's picture. */
 const PH={};
 const pic=p=>{const a=PH[p.id];return a&&a.length?a[a.length-1].url:img(p.type)};
-const phc=p=>PH[p.id]?.length?' class="ph"':'';
+const phc=p=>{const a=PH[p.id];return a&&a.length&&!a[a.length-1].cut?' class="ph"':''};
 const idb=new Promise(res=>{try{const q=indexedDB.open('yarok',1);q.onupgradeneeded=()=>q.result.createObjectStore('photos',{keyPath:'id',autoIncrement:true}).createIndex('plant','plant');q.onsuccess=()=>res(q.result);q.onerror=()=>res(null)}catch(e){res(null)}});
 async function dbAll(){const db=await idb;if(!db)return[];return new Promise(res=>{const q=db.transaction('photos').objectStore('photos').getAll();q.onsuccess=()=>res(q.result||[]);q.onerror=()=>res([])})}
 async function dbPut(rec){const db=await idb;if(!db)throw new Error('no db');return new Promise((res,rej)=>{const q=db.transaction('photos','readwrite').objectStore('photos').add(rec);q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error)})}
+async function dbSet(rec){const db=await idb;if(!db)throw new Error('no db');return new Promise((res,rej)=>{const q=db.transaction('photos','readwrite').objectStore('photos').put(rec);q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error)})}
+async function dbGet(id){const db=await idb;if(!db)return null;return new Promise(res=>{const q=db.transaction('photos').objectStore('photos').get(id);q.onsuccess=()=>res(q.result);q.onerror=()=>res(null)})}
 async function dbDel(id){const db=await idb;if(!db)return;return new Promise(res=>{const t=db.transaction('photos','readwrite');t.objectStore('photos').delete(id);t.oncomplete=res;t.onerror=res})}
-async function loadPhotos(){(await dbAll()).sort((a,b)=>a.ts-b.ts).forEach(r=>{(PH[r.plant]=PH[r.plant]||[]).push({id:r.id,ts:r.ts,url:URL.createObjectURL(r.blob)})});render()}
+async function loadPhotos(){(await dbAll()).sort((a,b)=>a.ts-b.ts).forEach(r=>{(PH[r.plant]=PH[r.plant]||[]).push({id:r.id,ts:r.ts,cut:!!r.cut,url:URL.createObjectURL(r.blob)})});render()}
 async function shrink(file){
  const bmp=await createImageBitmap(file),k=Math.min(1,1100/Math.max(bmp.width,bmp.height));
  const c=document.createElement('canvas');c.width=Math.round(bmp.width*k);c.height=Math.round(bmp.height*k);c.getContext('2d').drawImage(bmp,0,0,c.width,c.height);
  return new Promise(res=>c.toBlob(res,'image/jpeg',.84));
+}
+/* Background removal runs on the phone (imgly, ISNet small). The model (~45MB) downloads once on first use. */
+let bgLib=null;
+function busy(t){let b=$('busy');if(!t){b?.remove();return}if(!b){$('screen').insertAdjacentHTML('beforeend','<div class="busy" id="busy" role="status"><i></i><span></span></div>');b=$('busy')}b.querySelector('span').textContent=t}
+async function cutout(blob){
+ bgLib=bgLib||import('./vendor/bgremove.js');
+ const {removeBackground}=await bgLib;
+ let seen=0;busy('✂️ מסיר רקע…');
+ const out=await removeBackground(blob,{model:'small',output:{format:'image/png'},progress:(k,c,t)=>{if(k.startsWith('fetch')&&t>3e6){const pc=Math.round(c/t*100);if(pc!==seen){seen=pc;busy(`✂️ מוריד את כלי הסרת הרקע ${pc}% (פעם ראשונה בלבד)`)}}else if(k.startsWith('compute'))busy('✂️ מסיר רקע…')}});
+ // trim transparent edges and keep it small
+ const bmp=await createImageBitmap(out),c=document.createElement('canvas');c.width=bmp.width;c.height=bmp.height;const g=c.getContext('2d');g.drawImage(bmp,0,0);
+ const d=g.getImageData(0,0,c.width,c.height).data;let x0=c.width,y0=c.height,x1=0,y1=0;
+ for(let y=0;y<c.height;y+=2)for(let x=0;x<c.width;x+=2)if(d[(y*c.width+x)*4+3]>24){if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y}
+ if(x1<=x0||y1<=y0)throw new Error('empty');
+ const w=x1-x0+2,h=y1-y0+2,k=Math.min(1,900/Math.max(w,h)),o=document.createElement('canvas');o.width=Math.round(w*k);o.height=Math.round(h*k);
+ o.getContext('2d').drawImage(c,x0,y0,w,h,0,0,o.width,o.height);
+ return new Promise(res=>o.toBlob(res,'image/png'));
+}
+async function tryCut(blob){
+ if(S.remind.autocut===false)return {blob,cut:false};
+ try{const b=await cutout(blob);busy();return {blob:b,cut:true}}
+ catch(e){busy();toast('לא הצלחתי להסיר את הרקע, נשמרה התמונה המקורית');return {blob,cut:false}}
+}
+async function recut(pid,id){
+ const rec=await dbGet(id);if(!rec)return;
+ try{const b=await cutout(rec.blob);busy();rec.blob=b;rec.cut=true;await dbSet(rec);
+  const x=(PH[pid]||[]).find(x=>x.id===id);if(x){URL.revokeObjectURL(x.url);x.url=URL.createObjectURL(b);x.cut=true}
+  render();toast('הרקע הוסר')}
+ catch(e){busy();toast('לא הצלחתי להסיר את הרקע מהתמונה הזו')}
 }
 let shootFor=null;
 function shoot(id,gallery){shootFor=id;const f=$(gallery?'gal':'cam');f.value='';f.click()}
@@ -609,8 +643,8 @@ async function onShot(file){
  if(shootFor==='add'){if(!file)return;try{A.blob=await shrink(file);if(A.url)URL.revokeObjectURL(A.url);A.url=URL.createObjectURL(A.blob);A.step='type';render()}catch(e){toast('לא הצלחתי לקרוא את התמונה')}return}
  const p=S.plants.find(x=>x.id===shootFor);if(!p||!file)return;
  try{
-  const blob=await shrink(file),ts=Date.now(),id=await dbPut({plant:p.id,ts,blob});
-  (PH[p.id]=PH[p.id]||[]).push({id,ts,url:URL.createObjectURL(blob)});
+  const {blob,cut}=await tryCut(await shrink(file)),ts=Date.now(),id=await dbPut({plant:p.id,ts,blob,cut});
+  (PH[p.id]=PH[p.id]||[]).push({id,ts,cut,url:URL.createObjectURL(blob)});
   p.photoAt=ts;S.shot[p.id]=1;save();render();toast(`התמונה של ${p.name} נשמרה`);
  }catch(e){toast('לא הצלחתי לשמור את התמונה')}
 }
@@ -747,7 +781,7 @@ function journal(p){
  const first=a[0],last=a[a.length-1],days=Math.round((dayStart(last.ts)-dayStart(first.ts))/DAY);
  return `<div class="over glass">${head}
   ${a.length>1?`<div class="ba"><figure><img src="${first.url}" alt=""><figcaption>${fmtDay(first.ts)}</figcaption></figure><figure><img src="${last.url}" alt=""><figcaption>${fmtDay(last.ts)}</figcaption></figure></div><p class="txt" style="color:var(--mute);margin-top:8px">${days?`${days} ימים של צמיחה`:'שתי תמונות מהיום'} · ${a.length} תמונות</p>`:''}
-  <div class="jr">${a.map(x=>`<figure><img src="${x.url}" alt=""><figcaption>${fmtDay(x.ts)}</figcaption><button class="jdel" data-unshot="${p.id}:${x.id}" aria-label="מחק תמונה">✕</button></figure>`).reverse().join('')}</div>
+  <div class="jr">${a.map(x=>`<figure><img src="${x.url}" alt=""><figcaption>${fmtDay(x.ts)}</figcaption><button class="jdel" data-unshot="${p.id}:${x.id}" aria-label="מחק תמונה">✕</button>${x.cut?'':`<button class="jcut" data-recut="${p.id}:${x.id}" aria-label="הסר רקע">✂️</button>`}</figure>`).reverse().join('')}</div>
   ${S.remind.photo?`<p class="txt" style="color:var(--mute);font-size:13px;margin-top:8px">הצילום הבא ${next?`בעוד ${next} ימים`:'היום'}.</p>`:''}
  </div>`;
 }
@@ -784,7 +818,7 @@ async function addPlant(){
  if(A.kind==='custom')p.over={every,sp:name};
  setLast(p,lw<0?every:lw);
  S.plants.push(p);
- if(A.blob){try{const ts=Date.now(),id=await dbPut({plant:p.id,ts,blob:A.blob});(PH[p.id]=PH[p.id]||[]).push({id,ts,url:URL.createObjectURL(A.blob)})}catch(e){}}
+ if(A.blob){try{const {blob,cut}=await tryCut(A.blob),ts=Date.now(),id=await dbPut({plant:p.id,ts,blob,cut});(PH[p.id]=PH[p.id]||[]).push({id,ts,cut,url:URL.createObjectURL(blob)})}catch(e){}}
  A={step:'photo'};S.tab='plants';sel=p.id;save();render();
  toast(lw<0?`${name} נוסף. כדאי להשקות אותו היום`:`${name} נוסף. ${act(p)} הבאה ${when(p)}`);
 }
@@ -854,11 +888,12 @@ function tripCard(){
  </div>`;
 }
 function reminders(){
- const R=S.remind,sw=(k,t,s)=>`<label class="set glass" for="r-${k}"><div><b>${t}</b><small>${s}</small></div><input type="checkbox" class="sw" id="r-${k}" data-r="${k}" ${R[k]?'checked':''}></label>`;
+ const R=S.remind,swOn=(k,t,s)=>`<label class="set glass" for="r-${k}"><div><b>${t}</b><small>${s}</small></div><input type="checkbox" class="sw" id="r-${k}" data-r="${k}" ${R[k]!==false?'checked':''}></label>`,sw=(k,t,s)=>`<label class="set glass" for="r-${k}"><div><b>${t}</b><small>${s}</small></div><input type="checkbox" class="sw" id="r-${k}" data-r="${k}" ${R[k]?'checked':''}></label>`;
  return `<div class="top"><h2><b>תזכורות</b></h2></div>
  <div class="set glass"><div><b>תזכורת יומית</b><small>כל המשימות של היום בהתראה אחת</small></div><input type="time" id="r-time" value="${R.time}"></div>
  ${sw('push','התראות בטלפון','התראה אמיתית במכשיר. באייפון, אחרי הוספה למסך הבית')}
  ${sw('photo','תזכורת לצלם','כל שבועיים, כדי לראות את הצמחים גדלים')}
+ ${swOn('autocut','הסרת רקע אוטומטית','כל תמונה חדשה של צמח נחתכת מהרקע, כמו שאר הצמחים')}
  ${sw('combine','התראה מרוכזת','במקום התראה נפרדת לכל צמח')}
  ${sw('weather','התראות מזג אוויר','גל חום, קרה או רוח חזקה במרפסת')}
  ${sw('shared','משותף לבית','כשמישהו משקה, התזכורת נעלמת לכולם')}
@@ -1015,6 +1050,7 @@ document.addEventListener('click',e=>{
  const b=e.target.closest('button');if(!b)return;const d=b.dataset;
  if(d.tab&&Date.now()-(+$('tabs').dataset.dragged||0)<300)return;
  if(d.tab){S.tab=d.tab;sel=null;$('view').scrollTop=0;save();render()}
+ else if(d.recut){const [pid,id]=d.recut.split(':').map(Number);recut(pid,id)}
  else if('attn' in d){S.attnAll=!S.attnAll;save();render()}
  else if(d.sort){S.sort=d.sort;save();render()}
  else if(d.seg){S.seg=d.seg;save();render()}
